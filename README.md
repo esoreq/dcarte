@@ -1,4 +1,4 @@
-![DCARTE logo](img/Logo-01.png)
+![DCARTE logo](images/Logo-01.png)
 
 
 `DCARTE` UK-DRI CAre Research & TEchnology data ingestion tools. It is currently the simplest way to access the ongoing data collected by the UKDRI-CRT project and the legacy data collected by the TIHM project.
