@@ -1,16 +1,8 @@
 [tool.poetry]
 name = "dcarte"
 version = "0.3.1"
-description = "DCARTE is a dataset ingestion tool from DCARTE UK-DRI CAre Research & 
-TEchnology. As of currently, it is the simplest way to have access to the ongoing
-data gathered by the UKDRI-CRT project as well as the legacy data created by the TIHM project.
-Dr. Eyal Soreq developed the platform to integrate data-driven analysis across a wide 
-range of data fields (e.g. IoT, behavioral, physiological, etc.). 
-The UKDRI-CRT project seeks to improve our knowledge of the many behavioural symptoms
-of dementia and how they are represented in objective continuous measurements. 
-This module can be used on either the Imperial College London RDS cluster or on a local 
-computer running Python >3.9, depending on your needs."
-authors = ["eyal soreq <eyal.soreq@ukdri.ac.uk>"]
+description = "DCARTE is a dataset ingestion tool from DCARTE UK-DRI CAre Research and TEchnology"
+authors = ["eyal soreq"]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.11"
