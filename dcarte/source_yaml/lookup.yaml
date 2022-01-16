@@ -1,0 +1,39 @@
+device_types:
+    columns:
+        - id
+        - manufacturer
+        - name 
+        - model_number 
+        - type  
+        - online_information
+    dtype: 
+        - category
+        - category
+        - category
+        - category
+        - category
+        - object          
+    datasets:  
+        - device_types        
+patients:
+    columns:
+        - id
+        - birth_date
+        - gender
+    dtype: 
+        - category
+        - float
+        - category             
+    datasets:  
+        - patients        
+homes:
+    columns:
+        - home_id
+        - patient_id
+        - n_known_occupants
+    dtype:         
+        - category
+        - category
+        - object            
+    datasets:  
+        - homes

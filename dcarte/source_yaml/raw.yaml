@@ -1,0 +1,249 @@
+vital_signs:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - value
+        - unit
+        - device_type
+    dtype: 
+        - category
+        - category
+        - datetime64
+        - float
+        - category
+        - category  
+    datasets:
+        - raw_body_weight
+        - raw_total_body_water
+        - raw_body_muscle_mass
+        - raw_heart_rate
+        - raw_body_mass_index
+        - raw_total_body_fat
+        - raw_total_bone_mass
+        - raw_oxygen_saturation
+        - raw_skin_temperature
+        - raw_body_temperature
+blood_pressure:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - systolic_value
+        - diastolic_value
+        - unit
+        - device_type
+    dtype: 
+        - category
+        - category
+        - datetime64
+        - float
+        - float
+        - category
+        - category  
+    datasets: 
+        - raw_blood_pressure
+environmental:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - location_name
+        - location_id
+        - value
+        - unit
+        - device_type
+    dtype: 
+        - category
+        - category
+        - datetime64
+        - category
+        - category
+        - float
+        - category  
+        - category  
+    datasets:
+        - raw_ambient_temperature
+        - raw_light
+activity:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - location_name
+        - location_id
+    dtype: 
+        - category
+        - category
+        - datetime64
+        - category
+        - category
+    datasets: 
+        - raw_activity_pir  
+door:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - location_name
+        - location_id
+        - value
+    dtype: 
+        - category
+        - category
+        - datetime64
+        - category
+        - category
+        - category    
+    datasets: 
+        - raw_door_sensor
+sleep_event:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - value
+    dtype: 
+        - category
+        - category
+        - datetime64
+        - category
+    datasets: 
+        - raw_sleep_event
+sleep_mat:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - state
+        - heart_rate
+        - respiratory_rate
+        - snoring
+    dtype: 
+        - category
+        - category
+        - datetime64
+        - category
+        - float
+        - float  
+        - category  
+    datasets: 
+        - raw_sleep_mat
+behavioural:
+    columns:
+        - home_id
+        - patient_id
+        - start_date 
+        - sub_types 
+        - notes
+    dtype: 
+        - category
+        - category
+        - datetime64
+        - category
+        - object
+    datasets: 
+        - raw_behavioural
+appliances:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - end_date
+        - device_type
+        - location_name
+        - location_id
+        - value
+    dtype: 
+        - category
+        - category
+        - datetime64
+        - datetime64
+        - category
+        - category  
+        - category      
+        - category              
+    datasets:
+        - raw_appliance_use
+encounter:
+    columns: 
+          - id
+          - start_date
+          - type
+          - patient_id
+          - home_id
+          - reason
+    dtype: 
+        - category
+        - datetime64
+        - category
+        - category
+        - category
+        - object
+    datasets:
+        - encounter
+procedure:
+    columns: 
+          - id
+          - start_date
+          - type
+          - patient_id
+          - home_id
+          - outcome
+          - follow_up
+          - notes
+    dtype: 
+        - category
+        - datetime64
+        - category
+        - category
+        - category
+        - object          
+        - object
+        - object        
+    datasets:
+        - procedure        
+issue:
+    columns: 
+          - id
+          - authored_on
+          - start_date
+          - type
+          - patient_id
+          - home_id
+          - priority
+          - status
+          - title
+          - description
+    dtype: 
+        - category
+        - datetime64
+        - datetime64
+        - category
+        - category
+        - category          
+        - category
+        - category
+        - object      
+        - object         
+    datasets:
+        - issue    
+observation_notes:
+    columns: 
+        - id
+        - date
+        - dataset
+        - subject_id
+        - patient_id
+        - home_id
+        - text
+    dtype: 
+        - category
+        - datetime64
+        - category
+        - category
+        - category
+        - category             
+        - object   
+    datasets:
+        - observation_notes                     
