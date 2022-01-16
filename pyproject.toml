@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dcarte"
-version = "0.3.1"
+version = "0.3.5"
 description = "DCARTE is a dataset ingestion tool from DCARTE UK-DRI CAre Research and TEchnology"
 authors = ["eyal soreq"]
 
@@ -19,6 +19,8 @@ ipywidgets = "^7.6.5"
 jupyter = "^1.0.0"
 lab = "^7.0"
 scipy = "^1.7.3"
+widgetsnbextension = "^3.5.2"
+jupyterlab = "^3.2.8"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

@@ -3,6 +3,8 @@ import shutil
 import uuid
 import os
 import webbrowser
+import dcarte
+import getpass
 from .utils import (load_yaml,
                     write_yaml,
                     update_yaml,
@@ -11,22 +13,23 @@ from .utils import (load_yaml,
 
 def get_config(config_file : str = '/dcarte/config.yaml',
                root: Path = Path('__file__').parent.absolute(),
-               home: Path = Path('~').expanduser()) -> dict:
-    """get_config a function that returns or creates and returns a local config file 
+               home: Path = Path('~').expanduser(),
+               dcarte_home: Path =  Path(dcarte.__file__).parent.absolute()) -> dict:
+    """get_config a function that returns or creates and returns a local config file
 
-    
+
     Args:
         config_file (str, optional): [description]. Defaults to '/dcarte/config.yaml'.
         root (Path, optional): [description]. Defaults to Path('__file__').parent.absolute().
         home (Path, optional): [description]. Defaults to Path('~').expanduser().
 
     Returns:
-        [dict]: containing all the configuration information neeeded for dcarte 
+        [dict]: containing all the configuration information neeeded for dcarte
     """
     if path_exists(str(home)+config_file):
         cfg = load_yaml(str(home)+config_file)
     else:
-        cfg =  create_config(home, root)
+        cfg =  create_config(home, root, dcarte_home)
     os.environ['MINDER_TOKEN'] = cfg['token']
     cfg.pop('token', None)
     return cfg
@@ -42,7 +45,7 @@ def update_config(new_dict:dict, home:Path = Path('~').expanduser()):
     update_yaml(f"{home}/dcarte/config.yaml", new_dict)
 
 
-def create_config(home:Path,root:Path):
+def create_config(home:Path,root:Path, dcarte_home:Path):
     """create_config creates a baseline config file
 
     Args:
@@ -56,14 +59,16 @@ def create_config(home:Path,root:Path):
     for p in ["/dcarte/config", "/dcarte/data"]:
         Path(f"{home}{p}").mkdir(parents=True, exist_ok=True)
     # copy yaml files from source_yaml to home/config
-    for p in Path(root).rglob('source_yaml'):
+    for p in Path(dcarte_home).rglob('source_yaml'):
         if p.is_dir():
             source_yaml = p.resolve()
+        else:
+            raise Exception("Sorry, unable to copy base config yaml files")               
     try:        
         files = list(Path(source_yaml).glob('*.yaml'))
         [shutil.copy2(f'{file}', f'{home}/dcarte/config') for file in files]
     except:
-        raise Exception("Sorry, nunable to copy base config yaml files")           
+        raise Exception("Sorry, unable to copy base config yaml files")           
     # create a baseline config dict
     cfg = baseline_config(home,root,files)
     # open webpage and request user to copy token
@@ -90,8 +95,8 @@ def get_token() -> str:
         str: a token generated at https://research.minder.care/portal/access-tokens
     """
     webbrowser.open('https://research.minder.care/portal/access-tokens')
-    print('Please generate a token and copy it into the input bar')
-    token = input()
+    print('Please go to https://research.minder.care/portal/access-tokens to generate a token and copy it into the input bar')
+    token = getpass.getpass(prompt='Token: ')
     return token
     
 

@@ -18,10 +18,10 @@ from .utils import (write_table,
                    timer,
                    set_path)
 
-if isnotebook():
-    from tqdm.notebook import tqdm
-else:
-    from tqdm import tqdm
+# if isnotebook():
+#     from tqdm.notebook import tqdm
+# else:
+from tqdm import tqdm
 
 cfg = get_config()
 NOW = date2iso(str(dt.datetime.now()))
