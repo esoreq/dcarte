@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 import sys
-sys.path.insert(0, os.path.abspath("."))
 import dcarte
 from dcarte.utils import process_transition, localize_time,load_csv_from_zip
 from dcarte.local import LocalDataset
@@ -11,7 +10,7 @@ import dcarte
 
 TIHM = '/external/tihm_dri/'
 
-def process_observation(obj):
+def process_observation(obj,TIHM = '/external/tihm_dri/'):
     cfg = get_config()
     tihmdri_zip = zipfile.ZipFile(f'{cfg["data_folder"]}{TIHM}tihmdri.zip')
     tihm15_zip = zipfile.ZipFile(f'{cfg["data_folder"]}{TIHM}tihm15.zip')
@@ -150,7 +149,7 @@ def process_physiology(self):
     return df
 
 
-def create_legacy_datasets():
+def create_legacy_datasets(TIHM = '/external/tihm_dri/'):
     domain = 'legacy'
     module = 'legacy'
     LocalDataset('observation',{},['process_observation'],domain,module)

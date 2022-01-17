@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 import datetime as dt
 import json
+import os
+import sys
 from pathlib import Path
 from .config import get_config, update_config
 import pandas as pd
@@ -76,9 +78,12 @@ class LocalDataset(object):
         self._delay = dt.timedelta(hours=self.delay)
         self.since = date2iso(self.since)         
         try: 
-            file_path = list(Path(BASE_DIR).rglob(self.module+'.py'))
-            if len(file_path)==0:
-                file_path = list(Path().rglob(self.module+'.py'))
+            module_path = list(Path(BASE_DIR).rglob(self.module+'.py'))
+            if len(module_path)==0:
+                module_path = list(Path().rglob(self.module+'.py'))
+            module_dir = os.path.dirname(module_path)  
+            if module_dir not in sys.path:
+                sys.path.append(module_dir)  
         except:
             print('UNABLE to find module path')        
         spec = importlib.util.spec_from_file_location(self.module, file_path[0])
