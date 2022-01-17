@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; dcarte 0.3.9 documentation</title>
+  <title>Installation &mdash; dcarte 0.3.10 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
             <a href="index.html" class="icon icon-home"> dcarte
           </a>
               <div class="version">
-                0.3.9
+                0.3.10
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -74,48 +74,12 @@
              
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
-<p>Installing Kong is pretty simple. Here is a step by step plan on how to do it.</p>
+<p>Installing DCARTE is pretty simple. Here is a step-by-step plan on how to do it.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Kong is available on Pypi as <code class="docutils literal notranslate"><span class="pre">django-kong</span></code>, but trunk is probably your
-best best for the most up to date features.</p>
+<p>DCARTE is available on Pypi, and installing it can be done using <cite>pip install dcarte</cite>.</p>
 </div>
-<p>First, obtain <a class="reference external" href="http://www.python.org/">Python</a> and <a class="reference external" href="http://pypi.python.org/pypi/virtualenv">virtualenv</a> if you do not already have them. Using a
-virtual environment will make the installation easier, and will help to avoid
-clutter in your system-wide libraries. You will also need <a class="reference external" href="http://git-scm.com/">Git</a> in order to
-clone the repository.</p>
-<p>Once you have these, create a virtual environment somewhere on your disk, then
-activate it:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="n">kong</span>
-<span class="n">cd</span> <span class="n">kong</span>
-<span class="n">source</span> <span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
-</pre></div>
-</div>
-<p>Kong ships with an example project that should get you up and running quickly. To actually get kong running, do the following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ericholscher</span><span class="o">/</span><span class="n">django</span><span class="o">-</span><span class="n">kong</span><span class="o">.</span><span class="n">git</span>
-<span class="n">cd</span> <span class="n">django</span><span class="o">-</span><span class="n">kong</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="o">.</span> <span class="c1">#Install Kong</span>
-<span class="n">cd</span> <span class="n">example_project</span>
-<span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">syncdb</span> <span class="o">--</span><span class="n">noinput</span>
-<span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">loaddata</span> <span class="n">test_data</span>
-<span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
-</pre></div>
-</div>
-<p>This will give you a locally running instance with a couple of example sites
-and an example test.</p>
-<p>Now that you have your tests in your database, you need to check that your
-tests run. You can run tests like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#Check all sites</span>
-<span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check_sites</span>
-<span class="c1">#Only run the front page test</span>
-<span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check_sites</span> <span class="o">-</span><span class="n">t</span> <span class="n">front</span><span class="o">-</span><span class="n">page</span>
-<span class="c1">#Only check sites of type Mine</span>
-<span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check_sites</span> <span class="o">-</span><span class="n">T</span> <span class="n">mine</span>
-</pre></div>
-</div>
-<p>The first command is the default way of running kong, and will run the tests for all of your sites.</p>
-<p>The second two different ways will run either a specific test, or a type of test. Both of these can run tests across multiple sites.</p>
+<p>Alternatively, you can use <cite>poetry &lt;https://python-poetry.org/&gt;</cite></p>
 </section>
 
 

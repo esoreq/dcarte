@@ -1,7 +1,3 @@
 # exclude everything
-env/*
-build/*
-dist/*
-tihmdri.egg-info/*
-data/*
-notebooks/*
+.venv/*
+.vscode/*

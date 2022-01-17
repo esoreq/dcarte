@@ -1,8 +1,11 @@
 [tool.poetry]
 name = "dcarte"
-version = "0.3.9"
+version = "0.3.10"
 description = "DCARTE is a dataset ingestion tool from DCARTE UK-DRI CAre Research and TEchnology"
 authors = ["eyal soreq"]
+documentation = "https://esoreq.github.io/dcarte/_build/html/index.html"
+repository = "https://github.com/esoreq/dcarte"
+
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.11"
