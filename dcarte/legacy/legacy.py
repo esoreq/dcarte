@@ -1,31 +1,40 @@
 import pandas as pd
 import os
 import sys
+sys.path.insert(0, os.path.abspath("."))
 import dcarte
-from dcarte.utils import process_transition, localize_time,load_csv_from_zip
+from dcarte.utils import process_transition, localize_time,load_csv_from_zip,timer
 from dcarte.local import LocalDataset
 from dcarte.config import get_config
 import zipfile
 import dcarte
 
-TIHM = '/external/tihm_dri/'
 
-def process_observation(obj,TIHM = '/external/tihm_dri/'):
+# On RCS use the following location to point to the legacy zip files 
+TIHM = '/../projects/dri_healthyhome/live/tihm/'
+# On your personal computer I tend to use TIHM = '/external/tihm/' and manualy copy these zips from rcs
+
+
+
+@timer('process_observation')
+def process_observation(obj):
     cfg = get_config()
-    tihmdri_zip = zipfile.ZipFile(f'{cfg["data_folder"]}{TIHM}tihmdri.zip')
-    tihm15_zip = zipfile.ZipFile(f'{cfg["data_folder"]}{TIHM}tihm15.zip')
+    tihmdri_zip = zipfile.ZipFile(f'{cfg["home"]}{TIHM}tihmdri.zip')
+    tihm15_zip = zipfile.ZipFile(f'{cfg["home"]}{TIHM}tihm15.zip')
     tihm15_df = load_csv_from_zip(tihm15_zip,'Observations.csv')
     tihmdri_df = load_csv_from_zip(tihmdri_zip,'Observations.csv')
     df = pd.concat([tihm15_df,tihmdri_df])
     return df
 
+@timer('process_device_type')                                 
 def process_device_type(obj):
     cfg = get_config()
-    tihmdri_zip = zipfile.ZipFile(f'{cfg["data_folder"]}{TIHM}tihmdri.zip')
+    tihmdri_zip = zipfile.ZipFile(f'{cfg["home"]}{TIHM}tihmdri.zip')
     Observation_type = pd.read_csv(tihmdri_zip.open('Observation-type.csv'))
     return Observation_type
 
 
+@timer('process_motion')    
 def process_motion(obj):
     df = obj.datasets['observation']
     df = (df[['subject','location','datetimeObserved','type']].
@@ -37,6 +46,7 @@ def process_motion(obj):
     df = df.drop_duplicates().reset_index()
     return df
 
+@timer('process_doors')  
 def process_doors(self):
     df = self.datasets['observation']
     columns = ['subject','location','datetimeObserved','valueState','type']
@@ -60,6 +70,7 @@ def process_doors(self):
     doors.location_name = doors.location_name.str.lower()
     return doors
 
+@timer('process_entryway') 
 def process_entryway(self):
     df = self.datasets['doors']
     entryways = ['front door', 'back door', 'main door']
@@ -70,6 +81,7 @@ def process_entryway(self):
                            
     return df.reset_index(drop=True)
 
+@timer('process_temperature')                                   
 def process_temperature(self):
     df = self.datasets['observation']
     columns = ['datetimeObserved','type','subject','location','valueQuantity','valueUnit']
@@ -79,6 +91,7 @@ def process_temperature(self):
     df = localize_time(df,['start_date'])
     return df
     
+@timer('process_light')                                     
 def process_light(self):
     df = self.datasets['observation']
     columns = ['datetimeObserved','type','subject','location','valueQuantity','valueUnit']
@@ -87,12 +100,13 @@ def process_light(self):
     df = df.assign(source='raw_light')
     df = localize_time(df,['start_date'])
     return df    
-    
+
+@timer('process_flags')                                     
 def process_flags(self):
     cfg = get_config()
     flags = []
     for legacy in ['tihmdri','tihm15']:
-        zip_ = zipfile.ZipFile(f'{cfg["data_folder"]}{TIHM}{legacy}.zip')
+        zip_ = zipfile.ZipFile(f'{cfg["home"]}{TIHM}{legacy}.zip')
         df = pd.read_csv(zip_.open('Flags.csv'))
         _type = pd.read_csv(zip_.open('Flag-type.csv'))
         _val = pd.read_csv(zip_.open('FlagValidations.csv'))
@@ -108,11 +122,12 @@ def process_flags(self):
     df = pd.concat(flags)
     return df
 
+@timer('process_wellbeing')                                
 def process_wellbeing(self):
     cfg = get_config()
     wellbeing = []
     for legacy in ['tihmdri','tihm15']:
-        zip_ = zipfile.ZipFile(f'{cfg["data_folder"]}{TIHM}{legacy}.zip')
+        zip_ = zipfile.ZipFile(f'{cfg["home"]}{TIHM}{legacy}.zip')
         df = pd.read_csv(zip_.open('QuestionnaireResponses.csv'))
         df = df.drop(columns=["questionnaire", "datetimeReceived"])
         df = df.astype({'datetimeAnswered':'datetime64'})
@@ -126,7 +141,7 @@ def process_wellbeing(self):
     df = pd.concat(wellbeing)
     return df
     
-    
+@timer('process_physiology')     
 def process_physiology(self):
     df = self.datasets['observation']
     device_type = self.datasets['device_type']
@@ -149,7 +164,8 @@ def process_physiology(self):
     return df
 
 
-def create_legacy_datasets(TIHM = '/external/tihm_dri/'):
+@timer('create_legacy_datasets')                                
+def create_legacy_datasets():
     domain = 'legacy'
     module = 'legacy'
     LocalDataset('observation',{},['process_observation'],domain,module)
@@ -186,5 +202,3 @@ def create_legacy_datasets(TIHM = '/external/tihm_dri/'):
     
 if __name__ == "__main__":
     create_legacy_datasets()  
-
-    

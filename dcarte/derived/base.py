@@ -5,6 +5,7 @@ import numpy as np
 import dcarte
 from dcarte.utils import process_transition, localize_time
 from dcarte.local import LocalDataset
+from dcarte.config import get_config
 import dcarte
 
 
@@ -64,7 +65,7 @@ def process_doors(self):
                                datetime, 
                                value, 
                                covariates)
-    return doors.drop('location_name',1).reset_index()
+    return doors.drop('location_name',axis=1).reset_index()
 
 
 def process_entryway(self):
