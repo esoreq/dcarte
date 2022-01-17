@@ -1,3 +1,4 @@
 {
-    "autoDocstring.docstringFormat": "sphinx"
+    "autoDocstring.docstringFormat": "sphinx",
+    "python.pythonPath": "/Users/eyalsoreq/github/DCARTE/.venv/bin/python"
 }
