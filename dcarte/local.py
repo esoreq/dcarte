@@ -81,7 +81,7 @@ class LocalDataset(object):
         module_dir = os.path.dirname(module_path[0])
         if module_dir not in sys.path:
             sys.path.append(module_dir)
-        spec = importlib.util.spec_from_file_location(self.module, file_path[0])
+        spec = importlib.util.spec_from_file_location(self.module, module_path[0])
         self._module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self._module)
         self.local_file = (f'{self.data_folder}/'
