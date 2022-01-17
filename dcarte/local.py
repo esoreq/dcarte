@@ -22,7 +22,7 @@ import importlib
 
 cfg = get_config()
 NOW = date2iso(str(dt.datetime.now()))
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
 
 @dataclass
 class LocalDataset(object):
@@ -77,15 +77,10 @@ class LocalDataset(object):
         self.domain = self.domain.lower()
         self._delay = dt.timedelta(hours=self.delay)
         self.since = date2iso(self.since)         
-        try: 
-            module_path = list(Path(BASE_DIR).rglob(self.module+'.py'))
-            if len(module_path)==0:
-                module_path = list(Path().rglob(self.module+'.py'))
-            module_dir = os.path.dirname(module_path)  
-            if module_dir not in sys.path:
-                sys.path.append(module_dir)  
-        except:
-            print('UNABLE to find module path')        
+        module_path = list(Path().rglob(self.module+'.py'))
+        module_dir = os.path.dirname(module_path[0])
+        if module_dir not in sys.path:
+            sys.path.append(module_dir)
         spec = importlib.util.spec_from_file_location(self.module, file_path[0])
         self._module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self._module)
