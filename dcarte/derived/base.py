@@ -5,7 +5,6 @@ import numpy as np
 import dcarte
 from dcarte.utils import process_transition, localize_time
 from dcarte.local import LocalDataset
-from dcarte.config import get_config
 import dcarte
 
 

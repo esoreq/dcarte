@@ -1,8 +1,5 @@
 import pandas as pd
 import numpy as np
-import os
-import sys
-# This line allows you to clone the repository and skip installing dcarte
 import dcarte
 from dcarte.local import LocalDataset
 

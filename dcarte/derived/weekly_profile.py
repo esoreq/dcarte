@@ -1,9 +1,6 @@
 import numpy as np 
 import pandas as pd 
 import matplotlib.pyplot as plt
-import os
-import sys
-# This line allows you to clone the repository and skip installing dcarte
 from scipy.stats import circmean,circstd
 from dcarte.utils import (between_time,
                           time_to_angles)
