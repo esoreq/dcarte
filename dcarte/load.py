@@ -31,7 +31,7 @@ def load(dataset:str,domain:str,**kwargs):
     """
     dataset,domain = dataset.lower(),domain.lower()
     cfg = get_config()
-    dflt = get_defaults(**kwargs) | kwargs
+    dflt = get_defaults(**kwargs) 
     home = cfg['home']
     data_folder = cfg['data_folder']
     datasets = pd.DataFrame(cfg['domains'])
@@ -39,7 +39,7 @@ def load(dataset:str,domain:str,**kwargs):
         raise Exception(f"Sorry, {dataset} is not a registered dataset in {domain} domain in dcarte")
     
     local_file = f'{data_folder}/{domain}/{dataset}.parquet'
-    if path_exists(local_file) and not (dflt['update'] or dflt['reapply'] or dflt['reload']):
+    if path_exists(local_file) and not (dflt['update'] or dflt['reload'] or dflt['reapply']):
         return read_table(local_file)
     else:     
         info = load_yaml(f'{home}/dcarte/config/{domain}.yaml')

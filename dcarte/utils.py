@@ -38,7 +38,7 @@ def segment_freq(v:pd.Series,
         pd.DataFrame: [description]
     """
     ix = np.arange(lb,ub,step)
-    vc = v.value_counts(normalize=True).sort_index().rename('freq').to_frame()
+    vc = v.value_counts(normalize=False7).sort_index().rename('freq').to_frame()
     vc = vc.reindex(ix)
     vc = vc.assign(freq_smooth = savgol_filter(vc.freq, window_length, polyorder))
     x = vc.freq_smooth.values
@@ -423,7 +423,7 @@ def localize_time(df:pd.DataFrame, factors:list, timezones=None):
         _df = df[df.timezone == tz].copy()
         try:
             for factor in factors:
-                dt = pd.to_datetime(_df[factor]).dt.tz_localize(None)
+                dt = pd.to_datetime(_df[factor],utc=True).dt.tz_localize(None)
                 offset = pd.Series([t.utcoffset() for t in dt.dt.tz_localize(
                     tz, ambiguous=True, nonexistent='shift_forward')], index=dt.index)
                 _df[factor] = dt + offset
@@ -452,7 +452,7 @@ def epoch_to_local(dt: pd.Series, tz: str = 'Europe/London', unit: str = 's', sh
     Returns:
         pd.Series: [description]
     """
-    dt = pd.to_datetime(dt, unit=unit)
+    dt = pd.to_datetime(dt, unit=unit, utc=True)
     offset = pd.Series([t.utcoffset() for t in dt.dt.tz_localize(
         tz, ambiguous=True, nonexistent='shift_forward')], index=dt.index)
     return dt + offset + pd.Timedelta(hours=shift)
@@ -468,7 +468,7 @@ def utc_to_local(dt:pd.Series, tz:str='Europe/London', shift:int=-2):
     Returns:
         [type]: [description]
     """
-    dt = pd.to_datetime(dt).dt.tz_localize(None)
+    dt = pd.to_datetime(dt,utc=True).dt.tz_localize(None)
     offset = pd.Series([t.utcoffset() for t in dt.dt.tz_localize(
         tz, ambiguous=True, nonexistent='shift_forward')], index=dt.index)
     return dt + offset + pd.Timedelta(hours=shift)
