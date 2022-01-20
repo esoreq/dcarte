@@ -11,7 +11,6 @@ import os
 import pyarrow as pa
 import requests
 import yaml
-from IPython import get_ipython
 import zipfile
 import pandas as pd
 import numpy as np
@@ -119,7 +118,7 @@ def isnotebook() -> bool:
         bool: [description]
     """
     try:
-        shell = get_ipython().__class__.__name__
+        shell = True#get_ipython().__class__.__name__
         if shell == 'ZMQInteractiveShell':
             return True
         elif shell == 'TerminalInteractiveShell':

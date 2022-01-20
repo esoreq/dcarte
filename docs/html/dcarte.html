@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dcarte package &mdash; dcarte 0.3.12 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Overview" href="overview.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> dcarte
+          </a>
+              <div class="version">
+                0.3.12
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">dcarte package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-dcarte.config">dcarte.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-dcarte.domains">dcarte.domains module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-dcarte.load">dcarte.load module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-dcarte.local">dcarte.local module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-dcarte.minder">dcarte.minder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-dcarte.utils">dcarte.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-dcarte">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">dcarte</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>dcarte package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dcarte.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dcarte-package">
+<h1>dcarte package<a class="headerlink" href="#dcarte-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-dcarte.config">
+<span id="dcarte-config-module"></span><h2>dcarte.config module<a class="headerlink" href="#module-dcarte.config" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.config.baseline_config">
+<span class="sig-prename descclassname"><span class="pre">dcarte.config.</span></span><span class="sig-name descname"><span class="pre">baseline_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">home</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#dcarte.config.baseline_config" title="Permalink to this definition"></a></dt>
+<dd><p>baseline_config create a baseline config dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>home</strong> (<em>Path</em>) – [description]</p></li>
+<li><p><strong>root</strong> (<em>Path</em>) – [description]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.config.compare_source_yaml">
+<span class="sig-prename descclassname"><span class="pre">dcarte.config.</span></span><span class="sig-name descname"><span class="pre">compare_source_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">home</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_yaml</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.config.compare_source_yaml" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.config.create_config">
+<span class="sig-prename descclassname"><span class="pre">dcarte.config.</span></span><span class="sig-name descname"><span class="pre">create_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">home</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dcarte_home</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.config.create_config" title="Permalink to this definition"></a></dt>
+<dd><p>create_config creates a baseline config file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>home</strong> (<em>Path</em>) – [description]</p></li>
+<li><p><strong>root</strong> (<em>Path</em>) – [description]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.config.get_config">
+<span class="sig-prename descclassname"><span class="pre">dcarte.config.</span></span><span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#dcarte.config.get_config" title="Permalink to this definition"></a></dt>
+<dd><p>get_config a function that returns or creates and returns a local config file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_file</strong> (<em>str</em><em>, </em><em>optional</em>) – [description]. Defaults to ‘/dcarte/config.yaml’.</p></li>
+<li><p><strong>root</strong> (<em>Path</em><em>, </em><em>optional</em>) – [description]. Defaults to Path(‘__file__’).parent.absolute().</p></li>
+<li><p><strong>home</strong> (<em>Path</em><em>, </em><em>optional</em>) – [description]. Defaults to Path(‘~’).expanduser().</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>containing all the configuration information neeeded for dcarte</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.config.get_mac">
+<span class="sig-prename descclassname"><span class="pre">dcarte.config.</span></span><span class="sig-name descname"><span class="pre">get_mac</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#dcarte.config.get_mac" title="Permalink to this definition"></a></dt>
+<dd><p>get_mac return mac address of the compute node or computer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[description]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.config.get_source_yaml">
+<span class="sig-prename descclassname"><span class="pre">dcarte.config.</span></span><span class="sig-name descname"><span class="pre">get_source_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dcarte_home</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.config.get_source_yaml" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.config.get_token">
+<span class="sig-prename descclassname"><span class="pre">dcarte.config.</span></span><span class="sig-name descname"><span class="pre">get_token</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#dcarte.config.get_token" title="Permalink to this definition"></a></dt>
+<dd><p>get_token opens the access-tokens website to create a unique REST token</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a token generated at <a class="reference external" href="https://research.minder.care/portal/access-tokens">https://research.minder.care/portal/access-tokens</a></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.config.update_config">
+<span class="sig-prename descclassname"><span class="pre">dcarte.config.</span></span><span class="sig-name descname"><span class="pre">update_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.config.update_config" title="Permalink to this definition"></a></dt>
+<dd><p>update_config updates the central config file with data from new_dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>new_dict</strong> (<em>dict</em>) – [description]</p></li>
+<li><p><strong>home</strong> (<em>Path</em><em>, </em><em>optional</em>) – [description]. Defaults to Path(‘~’).expanduser().</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-dcarte.domains">
+<span id="dcarte-domains-module"></span><h2>dcarte.domains module<a class="headerlink" href="#module-dcarte.domains" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.domains.domains">
+<span class="sig-prename descclassname"><span class="pre">dcarte.domains.</span></span><span class="sig-name descname"><span class="pre">domains</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.domains.domains" title="Permalink to this definition"></a></dt>
+<dd><p>domains prints the current potential local domains as a table to stdout</p>
+<p>[extended_summary]</p>
+</dd></dl>
+
+</section>
+<section id="module-dcarte.load">
+<span id="dcarte-load-module"></span><h2>dcarte.load module<a class="headerlink" href="#module-dcarte.load" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.load.get_defaults">
+<span class="sig-prename descclassname"><span class="pre">dcarte.load.</span></span><span class="sig-name descname"><span class="pre">get_defaults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.load.get_defaults" title="Permalink to this definition"></a></dt>
+<dd><p>get_defaults [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[description]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.load.load">
+<span class="sig-prename descclassname"><span class="pre">dcarte.load.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.load.load" title="Permalink to this definition"></a></dt>
+<dd><p>load [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>str</em>) – [description]</p></li>
+<li><p><strong>domain</strong> (<em>str</em>) – [description]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – [description]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[description]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-dcarte.local">
+<span id="dcarte-local-module"></span><h2>dcarte.local module<a class="headerlink" href="#module-dcarte.local" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dcarte.local.</span></span><span class="sig-name descname"><span class="pre">LocalDataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.local.LocalDataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>LocalDataset [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset_name</strong> (<em>[</em><em>str</em><em>]</em>) – [description]</p></li>
+<li><p><strong>datasets</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>pipeline</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>domain</strong> (<em>[</em><em>str</em><em>]</em>) – [description]</p></li>
+<li><p><strong>module</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>dependencies</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>since</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>until</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>delay</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>reload</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>reapply</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>update</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>home</strong> (<em>[</em><em>Path</em><em>]</em>) – [description]</p></li>
+<li><p><strong>compression</strong> (<em>[</em><em>str</em><em>]</em>) – [description]</p></li>
+<li><p><strong>data_folder</strong> (<em>[</em><em>str</em><em>]</em>) – [description]</p></li>
+<li><p><strong>data</strong> (<em>[</em><em>pd.DataFrame</em><em>]</em>) – [description]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.check_recipe">
+<span class="sig-name descname"><span class="pre">check_recipe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.local.LocalDataset.check_recipe" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.compression">
+<span class="sig-name descname"><span class="pre">compression</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'GZIP'</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.compression" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.data_folder">
+<span class="sig-name descname"><span class="pre">data_folder</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'/Users/eyalsoreq/dcarte/data'</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.data_folder" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.dataset_name">
+<span class="sig-name descname"><span class="pre">dataset_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.dataset_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.datasets">
+<span class="sig-name descname"><span class="pre">datasets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.datasets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.delay">
+<span class="sig-name descname"><span class="pre">delay</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.delay" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.dependencies">
+<span class="sig-name descname"><span class="pre">dependencies</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.dependencies" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.domain">
+<span class="sig-name descname"><span class="pre">domain</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.domain" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.home">
+<span class="sig-name descname"><span class="pre">home</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'/Users/eyalsoreq'</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.home" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.load_dataset">
+<span class="sig-name descname"><span class="pre">load_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.local.LocalDataset.load_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>load_dataset [summary]</p>
+<p>[extended_summary]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.load_metadata">
+<span class="sig-name descname"><span class="pre">load_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.local.LocalDataset.load_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>load_metadata [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[description]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.module">
+<span class="sig-name descname"><span class="pre">module</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base'</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.module" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.pipeline">
+<span class="sig-name descname"><span class="pre">pipeline</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.pipeline" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.process_dataset">
+<span class="sig-name descname"><span class="pre">process_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.local.LocalDataset.process_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>process_dataset [summary]</p>
+<p>[extended_summary]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.reapply">
+<span class="sig-name descname"><span class="pre">reapply</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.reapply" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.reapply_dataset">
+<span class="sig-name descname"><span class="pre">reapply_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.local.LocalDataset.reapply_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>reapply_dataset [summary]</p>
+<p>[extended_summary]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.register_dataset">
+<span class="sig-name descname"><span class="pre">register_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dcarte.local.LocalDataset.register_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>register_dataset [summary]</p>
+<p>[extended_summary]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.reload">
+<span class="sig-name descname"><span class="pre">reload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.reload" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.save_dataset">
+<span class="sig-name descname"><span class="pre">save_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dcarte.local.LocalDataset.save_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>save_dataset [summary]</p>
+<p>[extended_summary]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.since">
+<span class="sig-name descname"><span class="pre">since</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'2019-04-01'</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.since" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.until">
+<span class="sig-name descname"><span class="pre">until</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'2022-01-20T14:43:20.989297Z'</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.until" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.update">
+<span class="sig-name descname"><span class="pre">update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#dcarte.local.LocalDataset.update" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.update_dataset">
+<span class="sig-name descname"><span class="pre">update_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.local.LocalDataset.update_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>update_dataset [summary]</p>
+<p>[extended_summary]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.local.LocalDataset.update_metadata">
+<span class="sig-name descname"><span class="pre">update_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.local.LocalDataset.update_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>update_metadata [summary]</p>
+<p>[extended_summary]</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-dcarte.minder">
+<span id="dcarte-minder-module"></span><h2>dcarte.minder module<a class="headerlink" href="#module-dcarte.minder" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dcarte.minder.</span></span><span class="sig-name descname"><span class="pre">MinderDataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>MinderDataset class handles the downloading of datasets from the minder reserch platform</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset_name</strong> (<em>[</em><em>str</em><em>]</em>) – [description]</p></li>
+<li><p><strong>datasets</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>columns</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>domain</strong> (<em>[</em><em>str</em><em>]</em>) – [description]</p></li>
+<li><p><strong>dtypes</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>since</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>until</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>delay</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>auth</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>headers</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>server</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>token</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>compression</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>data_folder</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>data</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>request_id</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>reload</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>reapply</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+<li><p><strong>update</strong> (<em>[</em><em>list</em><em>]</em>) – [description]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – [description]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[description]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[type]</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.append_dataset">
+<span class="sig-name descname"><span class="pre">append_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset.append_dataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.columns">
+<span class="sig-name descname"><span class="pre">columns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.columns" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.compression">
+<span class="sig-name descname"><span class="pre">compression</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'GZIP'</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.compression" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.data_folder">
+<span class="sig-name descname"><span class="pre">data_folder</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'/Users/eyalsoreq/dcarte/data'</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.data_folder" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.dataset_name">
+<span class="sig-name descname"><span class="pre">dataset_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.dataset_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.datasets">
+<span class="sig-name descname"><span class="pre">datasets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.datasets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.delay">
+<span class="sig-name descname"><span class="pre">delay</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.delay" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.domain">
+<span class="sig-name descname"><span class="pre">domain</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.domain" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.download_data">
+<span class="sig-name descname"><span class="pre">download_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset.download_data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.download_dataset">
+<span class="sig-name descname"><span class="pre">download_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset.download_dataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.dtypes">
+<span class="sig-name descname"><span class="pre">dtypes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.dtypes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.get_output">
+<span class="sig-name descname"><span class="pre">get_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset.get_output" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.headers">
+<span class="sig-name descname"><span class="pre">headers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.headers" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.home">
+<span class="sig-name descname"><span class="pre">home</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'/Users/eyalsoreq'</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.home" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.load_dataset">
+<span class="sig-name descname"><span class="pre">load_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset.load_dataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.load_metadata">
+<span class="sig-name descname"><span class="pre">load_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset.load_metadata" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.post_request">
+<span class="sig-name descname"><span class="pre">post_request</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset.post_request" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.process_request">
+<span class="sig-name descname"><span class="pre">process_request</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset.process_request" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.reapply">
+<span class="sig-name descname"><span class="pre">reapply</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.reapply" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.reload">
+<span class="sig-name descname"><span class="pre">reload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.reload" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.request_id">
+<span class="sig-name descname"><span class="pre">request_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.request_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.save_dataset">
+<span class="sig-name descname"><span class="pre">save_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset.save_dataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.server">
+<span class="sig-name descname"><span class="pre">server</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'https://research.minder.care/api/export'</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.server" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.since">
+<span class="sig-name descname"><span class="pre">since</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'2019-04-01'</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.since" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.until">
+<span class="sig-name descname"><span class="pre">until</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'2022-01-20T14:43:21.016953Z'</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.until" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.update">
+<span class="sig-name descname"><span class="pre">update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#dcarte.minder.MinderDataset.update" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.update_dataset">
+<span class="sig-name descname"><span class="pre">update_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset.update_dataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcarte.minder.MinderDataset.update_metadata">
+<span class="sig-name descname"><span class="pre">update_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.minder.MinderDataset.update_metadata" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-dcarte.utils">
+<span id="dcarte-utils-module"></span><h2>dcarte.utils module<a class="headerlink" href="#module-dcarte.utils" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dcarte.utils.BearerAuth">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">BearerAuth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.BearerAuth" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">requests.auth.AuthBase</span></code></p>
+<p>BearerAuth manages the coupling of a token to requests framework</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>requests</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.angles_to_time">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">angles_to_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">day</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.angles_to_time" title="Permalink to this definition"></a></dt>
+<dd><p>angles_to_time [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angles</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+<li><p><strong>day</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – [description]. Defaults to 24*60**2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.between_time">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">between_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.between_time" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.date2iso">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">date2iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.date2iso" title="Permalink to this definition"></a></dt>
+<dd><p>date2iso convert a date string to iso format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>date</strong> (<em>str</em>) – [description]</p></li>
+<li><p><strong>output_fmt</strong> (<em>str</em><em>, </em><em>optional</em>) – [description]. Defaults to ‘%Y-%m-%dT%H:%M:%S.%f’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.epoch_to_local">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">epoch_to_local</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.series.Series</span></span></span><a class="headerlink" href="#dcarte.utils.epoch_to_local" title="Permalink to this definition"></a></dt>
+<dd><p>epoch_to_local converts epoch</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dt</strong> (<em>pd.Series</em>) – [description]</p></li>
+<li><p><strong>tz</strong> (<em>str</em><em>, </em><em>optional</em>) – [description]. Defaults to ‘Europe/London’.</p></li>
+<li><p><strong>unit</strong> (<em>str</em><em>, </em><em>optional</em>) – [description]. Defaults to ‘s’.</p></li>
+<li><p><strong>shift</strong> (<em>int</em><em>, </em><em>optional</em>) – [description]. Defaults to 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.inject_metadata">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">inject_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyarrow.lib.table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyarrow.lib.Table</span></span></span><a class="headerlink" href="#dcarte.utils.inject_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>inject_metadata replaces metadata in a parquet pyspark file</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>pa.table</em>) – [description]</p></li>
+<li><p><strong>meta_content</strong> (<em>dict</em>) – [description]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pa.Table</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.isnotebook">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">isnotebook</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dcarte.utils.isnotebook" title="Permalink to this definition"></a></dt>
+<dd><p>isnotebook checks if the run environment is a jupyter notebook</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[description]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.lagged_df">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">lagged_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.lagged_df" title="Permalink to this definition"></a></dt>
+<dd><p>lagged_df returns a lagged dataframe for a specific factor</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – [description]</p></li>
+<li><p><strong>factor</strong> (<em>str</em><em>, </em><em>optional</em>) – [description]. Defaults to ‘activity’.</p></li>
+<li><p><strong>lags</strong> (<em>int</em><em>, </em><em>optional</em>) – [description]. Defaults to 7.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.load_csv_from_zip">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">load_csv_from_zip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_zip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csv_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.load_csv_from_zip" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.load_yaml">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">load_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#dcarte.utils.load_yaml" title="Permalink to this definition"></a></dt>
+<dd><p>load_yaml loads a yaml file into a dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>local_file</strong> (<em>str</em>) – [description]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.load_zip_csv">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">load_zip_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zip_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csv_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="headerlink" href="#dcarte.utils.load_zip_csv" title="Permalink to this definition"></a></dt>
+<dd><p>load_zip_csv returns a specific csv file from a zip file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zip_file</strong> (<em>str</em>) – [description]</p></li>
+<li><p><strong>csv_file</strong> (<em>str</em>) – [description]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.localize_time">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">localize_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timezones</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.localize_time" title="Permalink to this definition"></a></dt>
+<dd><p>localize_time [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – [description]</p></li>
+<li><p><strong>factors</strong> (<em>list</em>) – [description]</p></li>
+<li><p><strong>timezones</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.mean_time">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">mean_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.mean_time" title="Permalink to this definition"></a></dt>
+<dd><p>mean_time [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>times</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+<li><p><strong>kind</strong> (<em>str</em><em>, </em><em>optional</em>) – [description]. Defaults to ‘time’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.merge_dicts">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">merge_dicts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.merge_dicts" title="Permalink to this definition"></a></dt>
+<dd><p>merge_dicts merges two dictionaries</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d1</strong> (<em>dict</em>) – [description]</p></li>
+<li><p><strong>d2</strong> (<em>dict</em>) – [description]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><em>[type]</em> – [description]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.path_exists">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">path_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.path_exists" title="Permalink to this definition"></a></dt>
+<dd><p>path_exists checks if a file exists in the local filesystem</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>local_file</strong> (<em>str</em>) – [description]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.process_transition">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">process_transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">covariates</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="headerlink" href="#dcarte.utils.process_transition" title="Permalink to this definition"></a></dt>
+<dd><p>process_transition convert a timeseries DataFrame with datetimes to a transition dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – [description]</p></li>
+<li><p><strong>groupby</strong> (<em>list</em>) – [description]</p></li>
+<li><p><strong>datetime</strong> (<em>str</em>) – [description]</p></li>
+<li><p><strong>value</strong> (<em>str</em>) – [description]</p></li>
+<li><p><strong>covariates</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.read_metadata">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">read_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.read_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>read_metadata return only the metadata from a parquet pyspark file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – [description]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.read_table">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">read_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="headerlink" href="#dcarte.utils.read_table" title="Permalink to this definition"></a></dt>
+<dd><p>read_table reads a parquet pyspark file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – filename either in relative or in absoulte path</p></li>
+<li><p><strong>columns</strong> (<em>list</em><em>, </em><em>optional</em>) – specific columns to load. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.reindex_ts">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">reindex_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.series.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.reindex_ts" title="Permalink to this definition"></a></dt>
+<dd><p>reindex_ts reindex a timeseries by some freq</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>pd.Series</em>) – [description]</p></li>
+<li><p><strong>freq</strong> (<em>str</em>) – goes in the time format of pandas</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.seconds_to_time">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">seconds_to_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.seconds_to_time" title="Permalink to this definition"></a></dt>
+<dd><p>seconds_to_time [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seconds</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.segment_freq">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">segment_freq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="headerlink" href="#dcarte.utils.segment_freq" title="Permalink to this definition"></a></dt>
+<dd><p>segment_freq [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> (<em>pd.Series</em>) – [description]</p></li>
+<li><p><strong>window_length</strong> (<em>int</em><em>, </em><em>optional</em>) – [description]. Defaults to 59.</p></li>
+<li><p><strong>polyorder</strong> (<em>int</em><em>, </em><em>optional</em>) – [description]. Defaults to 1.</p></li>
+<li><p><strong>r</strong> (<em>int</em><em>, </em><em>optional</em>) – [description]. Defaults to 10.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.segment_summary">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">segment_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.segment_summary" title="Permalink to this definition"></a></dt>
+<dd><p>segment_summary [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vc</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.set_path">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">set_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.set_path" title="Permalink to this definition"></a></dt>
+<dd><p>set_path checks if a parent folder exists and if not creates it
+:param local_file: [description]
+:type local_file: str</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.shift_row_to_bottom">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">shift_row_to_bottom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_to_shift</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.shift_row_to_bottom" title="Permalink to this definition"></a></dt>
+<dd><p>shift_row_to_bottom [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+<li><p><strong>index_to_shift</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.shift_row_to_top">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">shift_row_to_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_to_shift</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.shift_row_to_top" title="Permalink to this definition"></a></dt>
+<dd><p>shift_row_to_top [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+<li><p><strong>index_to_shift</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.std_time">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">std_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.std_time" title="Permalink to this definition"></a></dt>
+<dd><p>std_time [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>times</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+<li><p><strong>kind</strong> (<em>str</em><em>, </em><em>optional</em>) – [description]. Defaults to ‘time’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.str_to_time">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">str_to_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.str_to_time" title="Permalink to this definition"></a></dt>
+<dd><p>str_to_time [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.time_cdf">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">time_cdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.series.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.series.Series</span></span></span><a class="headerlink" href="#dcarte.utils.time_cdf" title="Permalink to this definition"></a></dt>
+<dd><p>time_cdf return a cdf of times as a pandas Series</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>times</strong> (<em>pd.Series</em>) – [description]</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – [description]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.time_to_angles">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">time_to_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">day</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.time_to_angles" title="Permalink to this definition"></a></dt>
+<dd><p>time_to_angles [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+<li><p><strong>day</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – [description]. Defaults to 24*60**2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.timer">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">timer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.timer" title="Permalink to this definition"></a></dt>
+<dd><p>timer is a wrapper decorator to report functions duration
+:param desc: [description line to print to sdout]. Defaults to None.
+:type desc: str, optional</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.times_to_angles">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">times_to_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">day</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.times_to_angles" title="Permalink to this definition"></a></dt>
+<dd><p>times_to_angles [summary]</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>times</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+<li><p><strong>day</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – [description]. Defaults to 24*60**2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.update_table">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">update_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dcarte.utils.update_table" title="Permalink to this definition"></a></dt>
+<dd><p>update_table updates a parquet pyspark file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pd.DataFrame</em>) – [description]</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – [description]</p></li>
+<li><p><strong>compression</strong> (<em>str</em>) – [description]</p></li>
+<li><p><strong>meta_content</strong> (<em>dict</em><em>, </em><em>optional</em>) – [description]. Defaults to {}.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.update_yaml">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">update_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.update_yaml" title="Permalink to this definition"></a></dt>
+<dd><p>update_yaml updates a dictionary structure onto a yaml file</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>local_file</strong> (<em>str</em>) – [description]</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – [description]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.utc_to_local">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">utc_to_local</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.utc_to_local" title="Permalink to this definition"></a></dt>
+<dd><p>utc_to_local converts a timeseries from utc to a specific timezone</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dt</strong> (<em>pd.Series</em>) – [description]</p></li>
+<li><p><strong>tz</strong> (<em>str</em><em>, </em><em>optional</em>) – [description]. Defaults to ‘Europe/London’.</p></li>
+<li><p><strong>shift</strong> (<em>int</em><em>, </em><em>optional</em>) – [description]. Defaults to -2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.write_table">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">write_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dcarte.utils.write_table" title="Permalink to this definition"></a></dt>
+<dd><p>write_table writes data into a parquet pyspark file</p>
+<p>[extended_summary]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pd.DataFrame</em>) – [description]</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – [description]</p></li>
+<li><p><strong>compression</strong> (<em>str</em>) – [description]</p></li>
+<li><p><strong>meta_content</strong> (<em>dict</em><em>, </em><em>optional</em>) – [description]. Defaults to {}.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dcarte.utils.write_yaml">
+<span class="sig-prename descclassname"><span class="pre">dcarte.utils.</span></span><span class="sig-name descname"><span class="pre">write_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcarte.utils.write_yaml" title="Permalink to this definition"></a></dt>
+<dd><p>write_yaml writes a dictionary structure into a yaml file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>local_file</strong> (<em>str</em>) – [description]</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – [description]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-dcarte">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-dcarte" title="Permalink to this headline"></a></h2>
+<p>dcarte dataset fusion tools</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="overview.html" class="btn btn-neutral float-right" title="Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021 Eyal Soreq.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

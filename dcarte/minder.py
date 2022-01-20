@@ -123,6 +123,7 @@ class MinderDataset(object):
         while request_output.empty:
             sleep(sleep_time)
             request_output = self.get_output()
+            
         self.csv_url = request_output
 
     def get_output(self):
@@ -131,12 +132,14 @@ class MinderDataset(object):
         request_elements = request_elements[request_elements.id ==
                                             self.request_id]
         output = pd.DataFrame()
+        if request.status_code == 200 and request_elements.empty:
+            output = pd.DataFrame([False])
         if not request_elements.empty:
             if request_elements.jobRecord.notnull().iat[0]:
-                output = pd.DataFrame(
-                    request_elements.jobRecord.values[0]['output'])
+                output = pd.DataFrame(request_elements.jobRecord.values[0]['output'])
             if request_elements.status.iat[0] == 202:
                 print('*',end='')
+                
         return output
     
     def download_data(self):
@@ -196,9 +199,10 @@ class MinderDataset(object):
             self.data_request['until'] = self.until
             self.post_request()
             self.process_request()
-            self.download_data()
-            self.update_metadata()
-            self.append_dataset()
+            if self.csv_url.shape[1]>1:
+                self.download_data()
+                self.update_metadata()
+                self.append_dataset()    
             self.load_dataset()
         else:
             self.load_dataset()

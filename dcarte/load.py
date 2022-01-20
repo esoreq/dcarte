@@ -32,7 +32,7 @@ def load(dataset:str,domain:str,**kwargs):
     """
     dataset,domain = dataset.lower(),domain.lower()
     cfg = get_config()
-    dflt = get_defaults(**kwargs) 
+    dflt = get_defaults(cfg,**kwargs) 
     home = cfg['home']
     data_folder = cfg['data_folder']
     datasets = pd.DataFrame(cfg['domains'])
@@ -69,7 +69,7 @@ def load(dataset:str,domain:str,**kwargs):
 
         return output.data
 
-def get_defaults(**kwargs):
+def get_defaults(cfg,**kwargs):
     """get_defaults [summary]
 
     [extended_summary]
@@ -77,7 +77,7 @@ def get_defaults(**kwargs):
     Returns:
         [type]: [description]
     """
-    cfg = get_config()
+    # cfg = get_config()
     defaults = {'since': '2019-04-01',
                 'until': NOW,
                 'delay': 1,
