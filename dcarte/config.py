@@ -1,6 +1,7 @@
 from pathlib import Path
 import shutil
 import uuid
+import filecmp
 import os
 import webbrowser
 import dcarte
@@ -27,6 +28,10 @@ def get_config(config_file : str = '/dcarte/config.yaml',
         [dict]: containing all the configuration information neeeded for dcarte
     """
     if path_exists(str(home)+config_file):
+        # check if any updated yaml version exists in the toolbox folder
+        source_yaml = get_source_yaml(dcarte_home)
+        compare_source_yaml(home,source_yaml) 
+        # load the main config yaml file
         cfg = load_yaml(str(home)+config_file)
     else:
         cfg =  create_config(home, root, dcarte_home)
@@ -44,6 +49,25 @@ def update_config(new_dict:dict, home:Path = Path('~').expanduser()):
     """
     update_yaml(f"{home}/dcarte/config.yaml", new_dict)
 
+def compare_source_yaml(home,source_yaml):
+    try:        
+        files = list(Path(source_yaml).glob('*.yaml'))
+        for source in files:
+            target = f'{home}/dcarte/config/{source.name}'
+            if path_exists(target) and not filecmp.cmp(source,target):
+                shutil.copy2(source,target)
+    except:
+        raise Exception("Sorry, unable to copy base config yaml files") 
+    return files
+
+def get_source_yaml(dcarte_home:Path):
+    source_yaml = None
+    for p in Path(dcarte_home).rglob('source_yaml'):
+        if p.is_dir():
+            source_yaml = p.resolve()
+        else:
+            raise Exception("Sorry, unable to find base config yaml folder")          
+    return source_yaml
 
 def create_config(home:Path,root:Path, dcarte_home:Path):
     """create_config creates a baseline config file
@@ -59,16 +83,8 @@ def create_config(home:Path,root:Path, dcarte_home:Path):
     for p in ["/dcarte/config", "/dcarte/data"]:
         Path(f"{home}{p}").mkdir(parents=True, exist_ok=True)
     # copy yaml files from source_yaml to home/config
-    for p in Path(dcarte_home).rglob('source_yaml'):
-        if p.is_dir():
-            source_yaml = p.resolve()
-        else:
-            raise Exception("Sorry, unable to copy base config yaml files")               
-    try:        
-        files = list(Path(source_yaml).glob('*.yaml'))
-        [shutil.copy2(f'{file}', f'{home}/dcarte/config') for file in files]
-    except:
-        raise Exception("Sorry, unable to copy base config yaml files")           
+    source_yaml = get_source_yaml(dcarte_home)
+    compare_source_yaml(dcarte_home,source_yaml)                          
     # create a baseline config dict
     cfg = baseline_config(home,root,files)
     # open webpage and request user to copy token

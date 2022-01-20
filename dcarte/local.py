@@ -3,6 +3,8 @@ import datetime as dt
 import json
 import os
 import sys
+import filecmp
+import shutil
 from pathlib import Path
 from .config import get_config, update_config
 import pandas as pd
@@ -18,7 +20,6 @@ from .utils import (write_table,
                    date2iso,
                    set_path)
 import importlib
-
 
 cfg = get_config()
 NOW = date2iso(str(dt.datetime.now()))
@@ -76,14 +77,8 @@ class LocalDataset(object):
         self.dataset_name = self.dataset_name.lower()
         self.domain = self.domain.lower()
         self._delay = dt.timedelta(hours=self.delay)
-        self.since = date2iso(self.since)         
-        module_path = list(Path().rglob(self.module+'.py'))
-        module_dir = os.path.dirname(module_path[0])
-        if module_dir not in sys.path:
-            sys.path.append(module_dir)
-        spec = importlib.util.spec_from_file_location(self.module, module_path[0])
-        self._module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(self._module)
+        self.since = date2iso(self.since) 
+        self.check_recipe()        
         self.local_file = (f'{self.data_folder}/'
                            f'{self.domain}/'
                            f'{self.dataset_name}.parquet')
@@ -93,6 +88,31 @@ class LocalDataset(object):
         self.load_dataset()
         self.data = read_table(self.local_file)
 
+    def check_recipe(self):
+        module_path = list(Path().rglob(self.module+'.py'))
+        recipe_path = f'{self.data_folder}/recipes/{self.domain}/{self.module}.py' 
+        if path_exists(recipe_path):
+            if len(module_path)>0:
+                # compare both recipies if a local one exists and copy over if they are different 
+                same = filecmp.cmp(recipe_path, module_path[0], shallow=False)
+                if not same:
+                    shutil.copyfile(module_path[0], recipe_path)
+            else: 
+                module_path.append(Path(recipe_path))
+        else:
+            if len(module_path)>0:
+                set_path(recipe_path)
+                shutil.copyfile(module_path[0], recipe_path)
+            else:
+                raise 'Module not found'
+        module_dir = os.path.dirname(module_path[0])
+        if module_dir not in sys.path:
+            sys.path.append(module_dir)
+        spec = importlib.util.spec_from_file_location(self.module, module_path[0])
+        self._module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self._module)
+        
+    
     def load_dataset(self):
         """load_dataset [summary]
 

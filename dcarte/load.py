@@ -5,6 +5,7 @@ from .minder import MinderDataset
 from .utils import (load_yaml, 
                     timer,
                     date2iso,
+                    merge_dicts,
                     path_exists,
                     read_table)
 from .config import get_config
@@ -48,9 +49,11 @@ def load(dataset:str,domain:str,**kwargs):
                      'datasets':info[dataset]['datasets'],
                      'columns':info[dataset]['columns'],
                      'dtypes':info[dataset]['dtype'],
-                     'domain':domain} | dflt
+                     'domain':domain} 
+            input = merge_dicts(input,dflt)
 
-            output = MinderDataset(**input)
+
+            output = MinderDataset(**dict(input))
         else:
             dependencies = pd.DataFrame(info[dataset]['domains'])
             parent_datasets = {}
@@ -60,9 +63,9 @@ def load(dataset:str,domain:str,**kwargs):
                      'datasets':parent_datasets,
                      'pipeline':info[dataset]['pipeline'],
                      'module':info[dataset]['module'],
-                     'domain':domain} | dflt
-            
-            output = LocalDataset(**input)
+                     'domain':domain} 
+            input = merge_dicts(input,dflt)
+            output = LocalDataset(**dict(input))
 
         return output.data
 

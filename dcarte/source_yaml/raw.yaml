@@ -134,6 +134,7 @@ behavioural:
         - home_id
         - patient_id
         - start_date 
+        - type
         - sub_types 
         - notes
     dtype: 
