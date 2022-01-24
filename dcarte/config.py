@@ -84,7 +84,7 @@ def create_config(home:Path,root:Path, dcarte_home:Path):
         Path(f"{home}{p}").mkdir(parents=True, exist_ok=True)
     # copy yaml files from source_yaml to home/config
     source_yaml = get_source_yaml(dcarte_home)
-    compare_source_yaml(dcarte_home,source_yaml)                          
+    files = compare_source_yaml(dcarte_home,source_yaml)                          
     # create a baseline config dict
     cfg = baseline_config(home,root,files)
     # open webpage and request user to copy token
