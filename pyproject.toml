@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dcarte"
-version = "0.3.13"
+version = "0.3.14"
 description = "DCARTE is a dataset ingestion tool from DCARTE UK-DRI CAre Research and TEchnology"
 authors = ["eyal soreq"]
 documentation = "https://esoreq.github.io/dcarte/_build/html/index.html"
@@ -30,6 +30,8 @@ recommonmark = "^0.7.1"
 Sphinx = "^4.3.2"
 sphinxcontrib-napoleon = "^0.7"
 myst-parser = "^0.16.1"
+ipykernel = "^6.7.0"
+
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

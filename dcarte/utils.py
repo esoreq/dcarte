@@ -1,6 +1,8 @@
 from pathlib import Path
 import json
 from functools import wraps
+import collections
+from copy import deepcopy
 import time
 import datetime as dt
 from scipy.stats import circmean,circstd
@@ -258,7 +260,7 @@ def update_yaml(local_file: str, data: dict):
     """
     with open(local_file, 'r') as yamlfile:
         currdata = yaml.safe_load(yamlfile)
-        data_merged = dict(merge_dicts(currdata, data))
+        data_merged = merge_dicts(currdata,data)
     write_yaml(local_file, data_merged)
 
 
@@ -314,16 +316,18 @@ def merge_dicts(d1:dict, d2:dict):
         [type]: [description]
     """
  
-    for k in set(d1) | set(d2):
-        if k in d1 and k in d2:
-            if isinstance(d1[k], dict) and isinstance(d2[k], dict):
-                yield (k, dict(merge_dicts(d1[k], d2[k])))
-            else:
-                yield (k, d2[k])
-        elif k in d1:
-            yield (k, d1[k])
+
+
+    
+    result = deepcopy(d1)
+    for k2, v2 in d2.items():
+        v1 = result.get(k2)
+        if isinstance(v1, dict) and isinstance(v2, dict):
+            result[k2] = merge_dicts(v1, v2)
         else:
-            yield (k, d2[k])
+            result[k2] = deepcopy(v2)
+    return result
+            
 
 
 def lagged_df(df:pd.DataFrame, factor:str='activity', lags:int=7):

@@ -1,4 +1,5 @@
 from pathlib import Path
+import pandas as pd
 import shutil
 import uuid
 import filecmp
@@ -33,6 +34,11 @@ def get_config(config_file : str = '/dcarte/config.yaml',
         compare_source_yaml(home,source_yaml) 
         # load the main config yaml file
         cfg = load_yaml(str(home)+config_file)
+        # Check if cfg file reflects all the datasets in home
+        files = list(Path(str(home)+'/dcarte/config/').glob('*.yaml'))
+        domains = pd.DataFrame(cfg['domains']).domain.unique()
+        if domains.shape[0]!=len(files):
+            pass
     else:
         cfg =  create_config(home, root, dcarte_home)
     os.environ['MINDER_TOKEN'] = cfg['token']

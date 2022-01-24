@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import sys
 import numpy as np
-sys.path.insert(0, os.path.abspath("."))
+sys.path.insert(0, os.path.abspath("/Users/eyalsoreq/github/DCARTE/"))
 import dcarte
 from dcarte.utils import process_transition, localize_time
 from dcarte.local import LocalDataset
@@ -66,7 +66,7 @@ def process_doors(self):
                                datetime, 
                                value, 
                                covariates)
-    return doors.drop('location_name',1).reset_index()
+    return doors.drop('location_name',axis=1).reset_index()
 
 
 def process_entryway(self):

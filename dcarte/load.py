@@ -51,9 +51,7 @@ def load(dataset:str,domain:str,**kwargs):
                      'dtypes':info[dataset]['dtype'],
                      'domain':domain} 
             input = merge_dicts(input,dflt)
-
-
-            output = MinderDataset(**dict(input))
+            output = MinderDataset(**input)
         else:
             dependencies = pd.DataFrame(info[dataset]['domains'])
             parent_datasets = {}
@@ -65,7 +63,7 @@ def load(dataset:str,domain:str,**kwargs):
                      'module':info[dataset]['module'],
                      'domain':domain} 
             input = merge_dicts(input,dflt)
-            output = LocalDataset(**dict(input))
+            output = LocalDataset(**input)
 
         return output.data
 
