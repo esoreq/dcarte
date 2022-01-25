@@ -59,8 +59,10 @@ def compare_source_yaml(home,source_yaml):
     try:        
         files = list(Path(source_yaml).glob('*.yaml'))
         for source in files:
-            target = f'{home}/dcarte/config/{source.name}'
-            if path_exists(target) and not filecmp.cmp(source,target):
+            target = f'{home}dcarte/config/{source.name}'
+            if not path_exists(target): 
+                shutil.copyfile(source, target)
+            elif not filecmp.cmp(source,target): 
                 shutil.copy2(source,target)
     except:
         raise Exception("Sorry, unable to copy base config yaml files") 
