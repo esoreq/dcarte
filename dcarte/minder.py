@@ -131,9 +131,9 @@ class MinderDataset(object):
         request_elements = request_elements[request_elements.id ==
                                             self.request_id]
         output = pd.DataFrame()
-        if request.status_code == 200 and request_elements.empty:
-            output = pd.DataFrame([False])
-            print('Nothing to download')
+        # if request.status_code == 200 and request_elements.empty:
+        #     output = pd.DataFrame([False])
+        #     print('Nothing to download')
         if not request_elements.empty:
             if request_elements.jobRecord.notnull().iat[0]:
                 output = pd.DataFrame(request_elements.jobRecord.values[0]['output'])

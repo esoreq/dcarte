@@ -39,7 +39,7 @@ def segment_freq(v:pd.Series,
         pd.DataFrame: [description]
     """
     ix = np.arange(lb,ub,step)
-    vc = v.value_counts(normalize=False7).sort_index().rename('freq').to_frame()
+    vc = v.value_counts(normalize=False).sort_index().rename('freq').to_frame()
     vc = vc.reindex(ix)
     vc = vc.assign(freq_smooth = savgol_filter(vc.freq, window_length, polyorder))
     x = vc.freq_smooth.values
