@@ -7,16 +7,13 @@ import pandas as pd
 from time import sleep
 from io import StringIO
 import requests
-from .config import get_config
+from .config import get_config,update_token
 from .utils import (write_table,
                    read_table,
                    read_metadata,
-                   isnotebook,
-                   update_token,
                    date2iso,
                    BearerAuth,
                    path_exists,
-                   timer,
                    set_path)
 
 # if isnotebook():
@@ -136,11 +133,11 @@ class MinderDataset(object):
         request = requests.get(f'{self.server}/{self.request_id}/', auth=self.auth)
         request_elements = pd.DataFrame(request.json())
         output = pd.DataFrame()
-        if not request_elements.empty:
-            if request_elements.jobRecord.notnull().iat[0]:
-                output = pd.DataFrame(request_elements.loc['output'].jobRecord)
-            if request_elements.status.iat[0] == 202:
+        if request_elements.status.iat[0] == 202:
                 print('*',end='')
+        elif request_elements.status.iat[0] == 200: 
+             if  'output' in request_elements.index: 
+                output = pd.DataFrame(request_elements.loc['output'].jobRecord)        
                 
         return output
     
