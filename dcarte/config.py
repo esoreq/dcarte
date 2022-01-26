@@ -92,7 +92,7 @@ def create_config(home:Path,root:Path, dcarte_home:Path):
         Path(f"{home}{p}").mkdir(parents=True, exist_ok=True)
     # copy yaml files from source_yaml to home/config
     source_yaml = get_source_yaml(dcarte_home)
-    files = compare_source_yaml(dcarte_home,source_yaml)                          
+    files = compare_source_yaml(home,source_yaml)                          
     # create a baseline config dict
     cfg = baseline_config(home,root,files)
     # open webpage and request user to copy token
@@ -102,6 +102,14 @@ def create_config(home:Path,root:Path, dcarte_home:Path):
  
     return cfg
     
+def update_token() -> bool:
+    cfg = get_config()
+    cfg['token'] = get_token()
+    write_yaml(f"{cfg['home']}/dcarte/config.yaml", cfg)
+    os.environ['MINDER_TOKEN'] = cfg['token']
+    cfg.pop('token', None)
+    return True
+
 
 def get_mac() -> str:
     """get_mac return mac address of the compute node or computer

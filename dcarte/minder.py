@@ -12,6 +12,7 @@ from .utils import (write_table,
                    read_table,
                    read_metadata,
                    isnotebook,
+                   update_token,
                    date2iso,
                    BearerAuth,
                    path_exists,
@@ -114,6 +115,12 @@ class MinderDataset(object):
         if request.status_code != 403:
             self.request_id = (request.headers['Content-Location']
                                .split('/')[-1])
+        elif request.status_code == 401:    
+            if update_token():
+                self.post_request()
+            else:
+                raise Exception('There is a problem with your Token')    
+            
         else:
             raise Exception("You need an active VPN connection")
 
@@ -126,17 +133,12 @@ class MinderDataset(object):
         self.csv_url = request_output
 
     def get_output(self):
-        request = requests.get(self.server, auth=self.auth)
+        request = requests.get(f'{self.server}/{self.request_id}/', auth=self.auth)
         request_elements = pd.DataFrame(request.json())
-        request_elements = request_elements[request_elements.id ==
-                                            self.request_id]
         output = pd.DataFrame()
-        # if request.status_code == 200 and request_elements.empty:
-        #     output = pd.DataFrame([False])
-        #     print('Nothing to download')
         if not request_elements.empty:
             if request_elements.jobRecord.notnull().iat[0]:
-                output = pd.DataFrame(request_elements.jobRecord.values[0]['output'])
+                output = pd.DataFrame(request_elements.loc['output'].jobRecord)
             if request_elements.status.iat[0] == 202:
                 print('*',end='')
                 

@@ -73,8 +73,39 @@ def segment_summary(vc,shift=180):
                         proportion=('freq','sum')))
     summary.start = ((summary.start-shift)%360).transform(f)
     summary.end = ((summary.end-shift)%360).transform(f)
-    summary.proportion = (summary.proportion*100).round(1)
+
     return summary
+
+def round_to_quarters(number):
+    """Round a number to the closest half integer.
+    >>> round_to_quarters(1.3)
+    1.25
+    >>> round_to_quarters(2.6)
+    2.5
+    >>> round_to_quarters(3.0)
+    3.0
+    >>> round_to_quarters(4.1)
+    4.0"""
+
+    return np.round(number * 4) / 4
+
+def center_angle(x): 
+    return (np.deg2rad(x) + np.pi) % (2*np.pi) - np.pi
+
+
+def round_to_halves(number):
+    """Round a number to the closest half integer.
+    >>> round_to_halves(1.3)
+    1.5
+    >>> round_to_halves(2.6)
+    2.5
+    >>> round_to_halves(3.0)
+    3.0
+    >>> round_to_halves(4.1)
+    4.0"""
+
+    return np.round(number * 2) / 2
+
 
 def timer(desc : str = None):
     """timer is a wrapper decorator to report functions duration
