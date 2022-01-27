@@ -1,5 +1,6 @@
 import pandas as pd 
 import numpy as np
+import os 
 from .local import LocalDataset
 from .minder import MinderDataset
 from .utils import (load_yaml, 
