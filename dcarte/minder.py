@@ -20,7 +20,7 @@ from .utils import (write_table,
 #     from tqdm.notebook import tqdm
 # else:
 from tqdm import tqdm
-
+sep = os.sep
 cfg = get_config()
 NOW = date2iso(str(dt.datetime.now()))
 
@@ -85,8 +85,8 @@ class MinderDataset(object):
                              'until': self.until,
                              'datasets': {ds: {"columns": self.columns}
                                           for ds in self.datasets}}
-        self.local_file = (f'{self.data_folder}/'
-                           f'{self.domain}/'
+        self.local_file = (f'{self.data_folder}{sep}'
+                           f'{self.domain}{sep}'
                            f'{self.dataset_name}.parquet')
 
         if not path_exists(self.local_file) or self.reload:

@@ -12,7 +12,7 @@ from .config import get_config
 import datetime as dt
 
 NOW = date2iso(str(dt.datetime.now()))
-
+sep = os.sep
 
 @timer('Loading')
 def load(dataset:str,domain:str,**kwargs):
@@ -39,11 +39,11 @@ def load(dataset:str,domain:str,**kwargs):
     if not (datasets == np.array([dataset,domain])).all(axis=1).any():
         raise Exception(f"Sorry, {dataset} is not a registered dataset in {domain} domain in dcarte")
     
-    local_file = f'{data_folder}/{domain}/{dataset}.parquet'
+    local_file = f'{data_folder}{sep}{domain}{sep}{dataset}.parquet'
     if path_exists(local_file) and not (dflt['update'] or dflt['reload'] or dflt['reapply']):
         return read_table(local_file)
     else:     
-        info = load_yaml(f'{home}/dcarte/config/{domain}.yaml')
+        info = load_yaml(f'{home}{sep}dcarte{sep}config{sep}{domain}.yaml')
         if domain in ['raw','lookup']:
             input = {'dataset_name':dataset,
                      'datasets':info[dataset]['datasets'],

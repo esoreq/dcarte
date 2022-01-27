@@ -12,8 +12,9 @@ from .utils import (load_yaml,
                     update_yaml,
                     path_exists)
 
+sep = os.sep
 
-def get_config(config_file : str = '/dcarte/config.yaml',
+def get_config(config_file : str = f'{sep}dcarte{sep}config.yaml',
                root: Path = Path('__file__').parent.absolute(),
                home: Path = Path('~').expanduser(),
                dcarte_home: Path =  Path(dcarte.__file__).parent.absolute()) -> dict:
@@ -35,10 +36,12 @@ def get_config(config_file : str = '/dcarte/config.yaml',
         # load the main config yaml file
         cfg = load_yaml(str(home)+config_file)
         # Check if cfg file reflects all the datasets in home
-        files = list(Path(str(home)+'/dcarte/config/').glob('*.yaml'))
+        files = list(Path(f'{home}{sep}dcarte{sep}config{sep}').glob('*.yaml'))
         domains = pd.DataFrame(cfg['domains']).domain.unique()
+        #TODO: Es to reconstruct the main config.yaml based on the contents of the config folder
         if domains.shape[0]!=len(files):
             pass
+        
     else:
         cfg =  create_config(home, root, dcarte_home)
     os.environ['MINDER_TOKEN'] = cfg['token']
@@ -53,13 +56,13 @@ def update_config(new_dict:dict, home:Path = Path('~').expanduser()):
         new_dict (dict): [description]
         home (Path, optional): [description]. Defaults to Path('~').expanduser().
     """
-    update_yaml(f"{home}/dcarte/config.yaml", new_dict)
+    update_yaml(f"{home}{sep}dcarte{sep}config.yaml", new_dict)
 
 def compare_source_yaml(home,source_yaml):
     try:        
         files = list(Path(source_yaml).glob('*.yaml'))
         for source in files:
-            target = f'{home}/dcarte/config/{source.name}'
+            target = f'{home}{sep}dcarte{sep}config{sep}{source.name}'
             if not path_exists(target): 
                 shutil.copyfile(source, target)
             elif not filecmp.cmp(source,target): 
@@ -88,7 +91,7 @@ def create_config(home:Path,root:Path, dcarte_home:Path):
         [type]: [description]
     """
     # Create dcarte folder at home to store config and data folders
-    for p in ["/dcarte/config", "/dcarte/data"]:
+    for p in [f"{sep}dcarte{sep}config", f"{sep}dcarte{sep}data"]:
         Path(f"{home}{p}").mkdir(parents=True, exist_ok=True)
     # copy yaml files from source_yaml to home/config
     source_yaml = get_source_yaml(dcarte_home)
@@ -98,14 +101,14 @@ def create_config(home:Path,root:Path, dcarte_home:Path):
     # open webpage and request user to copy token
     cfg['token'] = get_token()
     cfg['mac'] = get_mac()
-    write_yaml(f"{home}/dcarte/config.yaml", cfg)
+    write_yaml(f"{home}{sep}dcarte{sep}config.yaml", cfg)
  
     return cfg
     
 def update_token() -> bool:
     cfg = get_config()
     cfg['token'] = get_token()
-    write_yaml(f"{cfg['home']}/dcarte/config.yaml", cfg)
+    write_yaml(f"{cfg['home']}{sep}dcarte{sep}config.yaml", cfg)
     os.environ['MINDER_TOKEN'] = cfg['token']
     cfg.pop('token', None)
     return True
@@ -148,7 +151,7 @@ def baseline_config(home: Path, root: Path, files:list) -> dict:
     headers = {'Accept': 'text/plain','Content-type': 'application/json'}
     cfg = {
         'compression': 'GZIP',
-        'data_folder': f"{home}/dcarte/data",
+        'data_folder': f"{home}{sep}dcarte{sep}data",
         'domains': datasets,
         'headers': headers,
         'home': f'{home}',

@@ -20,7 +20,7 @@ from .utils import (write_table,
                    date2iso,
                    set_path)
 import importlib
-
+sep = os.sep
 cfg = get_config()
 NOW = date2iso(str(dt.datetime.now()))
 # BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,8 +79,8 @@ class LocalDataset(object):
         self._delay = dt.timedelta(hours=self.delay)
         self.since = date2iso(self.since) 
         self.check_recipe()        
-        self.local_file = (f'{self.data_folder}/'
-                           f'{self.domain}/'
+        self.local_file = (f'{self.data_folder}{sep}'
+                           f'{self.domain}{sep}'
                            f'{self.dataset_name}.parquet')
         self.metadata = {'since': self.since,
                          'until': self.until,
@@ -90,7 +90,7 @@ class LocalDataset(object):
 
     def check_recipe(self):
         module_path = list(Path(Path.cwd()).resolve().rglob(self.module+'.py'))
-        recipe_path = f'{self.data_folder}/recipes/{self.domain}/{self.module}.py' 
+        recipe_path = f'{self.data_folder}{sep}recipes{sep}{self.domain}{sep}{self.module}.py' 
         if path_exists(recipe_path):
             if len(module_path)>0:
                 # compare both recipies if a local one exists and copy over if they are different 
@@ -213,7 +213,7 @@ class LocalDataset(object):
                           iloc[:,::-1].
                           rename(columns={1:'domain',0:'dataset'}).
                           to_dict(orient='records'))
-        collection_file = f'{home}/dcarte/config/{self.domain}.yaml'
+        collection_file = f'{home}{sep}dcarte{sep}config{sep}{self.domain}.yaml'
         data = {self.dataset_name: {"domains": dependencies,
                                     "pipeline": self.pipeline,
                                     "module": self.module}}
