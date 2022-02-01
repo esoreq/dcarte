@@ -89,7 +89,7 @@ class LocalDataset(object):
         self.data = read_table(self.local_file)
 
     def check_recipe(self):
-        module_path = list(Path(Path.cwd()).resolve().rglob(self.module+'.py'))
+        module_path = list(Path(Path.cwd()).resolve().glob(self.module+'.py'))
         recipe_path = f'{self.data_folder}{sep}recipes{sep}{self.domain}{sep}{self.module}.py' 
         if path_exists(recipe_path):
             if len(module_path)>0:
