@@ -1,3 +1,4 @@
 # exclude everything
 .venv/*
 .vscode/*
+*/*/__pycache__
