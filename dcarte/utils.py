@@ -292,7 +292,8 @@ def update_yaml(local_file: str, data: dict):
     with open(local_file, 'r') as yamlfile:
         currdata = yaml.safe_load(yamlfile)
         data_merged = merge_dicts(currdata,data)
-    write_yaml(local_file, data_merged)
+    if  currdata != data_merged:
+        write_yaml(local_file, data_merged)
 
 
 def load_csv_from_zip(_zip, csv_file):

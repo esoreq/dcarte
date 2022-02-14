@@ -109,47 +109,55 @@ class MinderDataset(object):
                                 data=json.dumps(self.data_request),
                                 headers=self.headers,
                                 auth=self.auth)
-        if request.status_code != 403:
-            self.request_id = (request.headers['Content-Location']
-                               .split('/')[-1])
-        elif request.status_code == 401:    
+        if request.status_code == 401:    
             if update_token():
                 self.post_request()
             else:
-                raise Exception('There is a problem with your Token')    
-            
+                raise Exception('There is a problem with your Token') 
+        if request.status_code != 403:
+            self.request_id = (request.headers['Content-Location']
+                               .split('/')[-1])
         else:
             raise Exception("You need an active VPN connection")
 
     def process_request(self, sleep_time:int=10):
-        request_output = self.get_output()
         print(f'Processing {self.dataset_name} ',end=':')
+        request_output = self.get_output()
         while request_output.empty:
             sleep(sleep_time)
             request_output = self.get_output()
         self.csv_url = request_output
 
     def get_output(self):
-        request = requests.get(f'{self.server}/{self.request_id}/', auth=self.auth)
-        request_elements = pd.DataFrame(request.json())
-        output = pd.DataFrame()
-        if request_elements.status.iat[0] == 202:
-                print('*',end='')
-        elif request_elements.status.iat[0] == 200: 
-             if  'output' in request_elements.index: 
-                output = pd.DataFrame(request_elements.loc['output'].jobRecord)        
-                
+        with requests.get(f'{self.server}/{self.request_id}/', auth=self.auth) as request:
+            request_elements = pd.DataFrame(request.json())
+            output = pd.DataFrame()
+            if request_elements.status.iat[0] == 202:
+                    print('*',end='')
+            elif request_elements.status.iat[0] == 200: 
+                if  'output' in request_elements.index: 
+                    output = pd.DataFrame(request_elements.loc['output'].jobRecord)                        
         return output
+    
+    def persistent_download(self,url,idx):
+        df = pd.DataFrame()
+        while df.empty:
+            try:
+                with requests.get(url, stream=True, auth=self.auth) as request:
+                    decoded_data = StringIO(request.content.decode('utf-8-sig'))
+                    df = pd.read_csv(decoded_data, sep=',', engine='python')
+                    df['source'] = self.csv_url.type[idx]
+            except:
+                print(self.request_id) 
+            sleep(2)    
+        return df 
     
     def download_data(self):
         data = []
         for idx, url in enumerate(tqdm(self.csv_url.url,
                                        desc=f'Downloading {self.dataset_name}',
                                        dynamic_ncols=True)):
-            request = requests.get(url, stream=True, auth=self.auth)
-            decoded_data = StringIO(request.content.decode('utf-8-sig'))
-            df = pd.read_csv(decoded_data, sep=',', engine='python')
-            df['source'] = self.csv_url.type[idx]
+            df = self.persistent_download(url,idx)
             data.append(df)
         self.data = pd.concat(data).reset_index(drop=True)
         if (self.data[self.columns[0]] == self.columns[0]).any():

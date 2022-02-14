@@ -85,6 +85,7 @@ class LocalDataset(object):
         self.metadata = {'since': self.since,
                          'until': self.until,
                          'Mac': cfg['mac']}
+        self.register_dataset()
         self.load_dataset()
         self.data = read_table(self.local_file)
 
@@ -144,11 +145,11 @@ class LocalDataset(object):
         """
         for func in self.pipeline:
             self.data = getattr(self._module, func)(self)
-        domains = pd.DataFrame(cfg['domains'])
-        dataset = np.array([self.domain,self.dataset_name])
-        dataset_exist = (domains == dataset).all(axis=1).any()
-        if not dataset_exist:
-            self.register_dataset()
+        # domains = pd.DataFrame(cfg['domains'])
+        # dataset = np.array([self.domain,self.dataset_name])
+        # # dataset_exist = (domains == dataset).all(axis=1).any()
+        # # if not dataset_exist:
+        # #     self.register_dataset()
         self.save_dataset()    
 
     def update_dataset(self):
@@ -205,9 +206,12 @@ class LocalDataset(object):
 
         [extended_summary]
         """
-        cfg['domains'].append({'domain':self.domain.lower(),'dataset':self.dataset_name.lower()})
-        cfg['domains'] = pd.DataFrame(cfg['domains']).drop_duplicates().to_dict('records')
-        update_config(cfg)
+        domains = cfg['domains']
+        domains.append({'domain':self.domain.lower(),'dataset':self.dataset_name.lower()})
+        domains = pd.DataFrame(domains).drop_duplicates().to_dict('records')
+        if domains != pd.DataFrame(cfg['domains']).drop_duplicates().to_dict('records'):
+            cfg['domains'] = domains
+            update_config(cfg)
         home = cfg['home']
         dependencies = (pd.DataFrame(self.dependencies).
                           iloc[:,::-1].
