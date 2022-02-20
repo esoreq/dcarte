@@ -11,6 +11,12 @@ import dcarte
 
 TIHM = '/external/tihm_dri/'
 
+
+def remap_cat(cat, mapping, df):
+    df.loc[:, cat] = pd.Categorical(df[cat])
+    df.loc[:, cat] = df[cat].cat.rename_categories(mapping)
+    return df
+
 def process_observation(obj):
     cfg = get_config()
     tihmdri_zip = zipfile.ZipFile(f'{cfg["data_folder"]}{TIHM}tihmdri.zip')
@@ -70,6 +76,73 @@ def process_entryway(self):
                            .astype('category')
                            
     return df.reset_index(drop=True)
+
+def clean_observations( df, device_type):
+    
+    # subset any event that is logged but contains no actual values to a Dataframe under null key
+    idx_null = df[["valueBoolean", "valueState", "valueQuantity",
+                    "valueDatetimeStart", "valueDatetimeEnd"]].isnull().values.all(axis=1)
+    df = df[idx_null == False]
+    df['datetimeObserved'] = pd.to_datetime(df['datetimeObserved'])
+    # filter out dates before 2014
+    df = df[df['datetimeObserved'].dt.year > 2014]
+    df = df[df.type != "724061007"]  # filter out device status
+    df = df.sort_values(by=['datetimeObserved']).reset_index(drop=True)
+    df['activity'] = 1
+    df['project_id'] = df.subject
+    df['display'] = df.type
+    df['device_name'] = df.type.astype('category')
+    mapp = device_type.set_index('code').display.to_dict()
+    df['device_name'] = df['device_name'].map(mapp)
+    df['display'] = df['display'].map(mapp)
+    df['project'] = 'legacy'
+    df['project'] = pd.Categorical(df['project'])
+    df['subject'] = pd.Categorical(df['subject'])
+    return df
+
+
+def parse_activity(self):
+    # convert movement, doors activity and appliances activity to a cleaned dataframe in day, hour and raw frequencies
+    df = self.datasets['observation']
+    device_type = self.datasets['device_type']
+    df = clean_observations(df,device_type)
+    doors = []
+    for k, subset in df[df.display == 'Door'].groupby(['subject', 'location', 'project']):
+        subset = subset[["datetimeObserved", "valueState"]].pivot(
+            columns="valueState", values="datetimeObserved").reset_index(drop=True)
+        if 'False' in subset.columns and 'True' in subset.columns:
+            subset = subset.rename(
+                columns={'False': 'Close', 'True': "Open"})
+        if ('False' in subset.columns) ^ ('True' in subset.columns):
+            subset = subset.head(1)
+        if subset.shape[0] > 1:
+            idx = np.where(subset.Open.isnull())
+            open = subset.iloc[idx[0]-1].Open.values
+            close = subset.iloc[idx[0]].Close.values
+            delta = (close - open).astype('timedelta64[s]')
+            m = open.shape[0]
+            doors.append(pd.DataFrame({'project': [k[2]]*m, 'subject': [k[0]]*m, 'location': [
+                            k[1]]*m, 'datetimeObserved': open, "Close": close, "delta": delta, "activity": [1]*m}))
+
+    doors = pd.concat(doors)
+    doors = doors[~doors.location.isin(
+        ['B', 'Bathroom', 'C', 'Dining Room'])]
+    doors = doors[doors.delta < timedelta(
+        minutes=15)].reset_index(drop=True)
+    doors = doors
+    appliances = df[df.display == 'Does turn on domestic appliance'][[
+        "project", "subject", "datetimeObserved", "location", "activity"]].copy()
+    appliances = appliances[~appliances.location.isin(['A', 'B'])].copy()
+    appliances.loc[appliances.location.isin(['Microwave', 'Toaster']), "location"] = 'Oven'
+    movement = df[df.display == 'Movement'][[
+        "project", "subject", "datetimeObserved", "location", "activity"]].copy()
+    movement = movement[~movement.location.isin(
+        ['D', 'Study', 'Living Room', "Front Door", 'Dining Room'])]
+    activity = pd.concat([doors, movement, appliances])[
+        ['project', 'subject', 'datetimeObserved', 'location']].copy()
+    activity = pd.get_dummies(activity, columns=[
+                                    'location'], prefix='', prefix_sep='')
+    return activity
 
 def process_temperature(self):
     df = self.datasets['observation']
@@ -166,6 +239,7 @@ def create_legacy_datasets():
                     'doors',
                     'physiology',
                     'temperature',
+                    'activity',
                     'light']:
         
         LocalDataset(dataset_name= dataset,

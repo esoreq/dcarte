@@ -209,9 +209,8 @@ class LocalDataset(object):
         domains = cfg['domains']
         domains.append({'domain':self.domain.lower(),'dataset':self.dataset_name.lower()})
         domains = pd.DataFrame(domains).drop_duplicates().to_dict('records')
-        if domains != pd.DataFrame(cfg['domains']).drop_duplicates().to_dict('records'):
-            cfg['domains'] = domains
-            update_config(cfg)
+        cfg['domains'] = domains
+        update_config(cfg)
         home = cfg['home']
         dependencies = (pd.DataFrame(self.dependencies).
                           iloc[:,::-1].
