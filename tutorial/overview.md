@@ -6,13 +6,13 @@ DCARTE provides a managed solution for storing and accessing UKDRI CRT smart hom
 
 In this lab, you will learn about and use DCARTE's different features to speed up your data analytics capabilities.
 
-### What you learn
+### What you will learn
 
 1. Gain a general understanding of how to set up an anaconda and Jupyter environment.
-1. Discover how to use DCARTE to download UKDRI CRT raw datasets.
-1. Discover how to generate derived datasets that rely on raw datasets and can be updated with DCARTE.
-1. How to re-create derived data domain snapshots in your local workspace using current recipes
-1. Finally, how to develop your own recipe to share with colleagues.
+2. Understand how to setup DCARTE for the first time
+3. Discover how to use DCARTE to download UKDRI CRT raw datasets.
+5. How to re-create derived data domain snapshots in your local workspace using existing recipes.
+6. Finally, how to develop your own recipe to share with colleagues.
 
 ### Setup and requirements
 

@@ -30,22 +30,10 @@ Let's test this using a Jupyter notebook
 
 ### First Jupyter notebook
 
-Open a Jupyter notebook and at the top write the following line:
+Open a Jupyter notebook and at the top cell write and run the following line:
 
 ```python
 import dcarte 
 ```
 
-Following the first setup (i.e. copying and pasting the token into the input bar), you should have access to selected raw datasets that are natively defined in dcarte.
-
-To load any dataset with dcarte, provide the load function with two arguments: the dataset name and the dataset domain.
-
-You can inspect the different datsets using the following command: 
-
-```python
-dcarte.domains()
-```
-
-![](imgs/figure-01.png)
-
-Where the domain is represented by the column header and all of the names contained in that column represent the various datsets in that domain.
+If you are setting dcarte for the first time,  you will need to copy and paste a minder token into the input bar. Once completed you should have access to selected raw datasets natively defined in dcarte.

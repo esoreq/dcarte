@@ -56,6 +56,7 @@ class LocalDataset(object):
     datasets: dict
     pipeline: list
     domain:  str
+    module_path: str = ''
     module: str = 'base'
     dependencies: list = field(default_factory=lambda: [])
     since: str = '2019-04-01'
@@ -90,26 +91,27 @@ class LocalDataset(object):
         self.data = read_table(self.local_file)
 
     def check_recipe(self):
-        module_path = list(Path(Path.cwd()).resolve().glob(self.module+'.py'))
-        recipe_path = f'{self.data_folder}{sep}recipes{sep}{self.domain}{sep}{self.module}.py' 
-        if path_exists(recipe_path):
-            if len(module_path)>0:
-                # compare both recipies if a local one exists and copy over if they are different 
-                same = filecmp.cmp(recipe_path, module_path[0], shallow=False)
-                if not same:
-                    shutil.copyfile(module_path[0], recipe_path)
-            else: 
-                module_path.append(Path(recipe_path))
+        if len(self.module_path)>0:
+            module_path = self.module_path
         else:
-            if len(module_path)>0:
-                set_path(recipe_path)
-                shutil.copyfile(module_path[0], recipe_path)
-            else:
-                raise 'Module not found'
-        module_dir = os.path.dirname(module_path[0])
+            module_path = str(Path(Path.cwd()).resolve().glob(self.module+'.py'))
+        recipe_path = f'{self.data_folder}{sep}recipes{sep}{self.domain}{sep}{self.module}.py' 
+        if path_exists(recipe_path) and path_exists(module_path):
+            # compare both recipies if a local one exists and copy over if they are different 
+            same = filecmp.cmp(recipe_path, module_path, shallow=False)
+            if not same:
+                shutil.copyfile(module_path, recipe_path)
+            else: 
+                module_path = recipe_path
+        elif path_exists(module_path) and not path_exists(recipe_path):
+            set_path(recipe_path)
+            shutil.copyfile(module_path, recipe_path)
+        else:
+            raise ValueError('Module not found')
+        module_dir = os.path.dirname(module_path)
         if module_dir not in sys.path:
             sys.path.append(module_dir)
-        spec = importlib.util.spec_from_file_location(self.module, module_path[0])
+        spec = importlib.util.spec_from_file_location(self.module, module_path)
         self._module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self._module)
         

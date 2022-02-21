@@ -91,6 +91,7 @@ def create_bed_occupancy():
                       pipeline = pipeline,
                       domain = domain,
                       module = module,
+                      module_path = __file__,
                       update = True,
                       dependencies = [['sleep','base']])
 
