@@ -14,7 +14,7 @@ def mean_time(x): return pd.Series(circmean(x,high=360),name='mean')
 def std_time(x): return pd.Series(circstd(x,high=360),name='std')
 
 
-def activity_dailies(obj):
+def process_activity_dailies(obj):
     """Activity_dailies creates a daily summary across key locations
     
     Args:
@@ -39,7 +39,7 @@ def activity_dailies(obj):
     activity_metrics= activity_metrics.query('Total > 0.0')
     return activity_metrics
 
-def activity_weeklies(obj):
+def process_activity_weeklies(obj):
     """activity_weeklies creates a weekly summary across key locations based on activity_dailies
     
     Args:
@@ -56,7 +56,7 @@ def activity_weeklies(obj):
                         agg({col:['mean','std'] for col in  df.columns}))
     return activity_weeklies
 
-def sleep_dailies(obj):
+def process_sleep_dailies(obj):
     """sleep_dailies creates a daily summary across key features from the sleep mat
     
     Args:
@@ -85,7 +85,7 @@ def sleep_dailies(obj):
     sleep_metrics = sleep_metrics.dropna(subset=['Heart rate','Breathing rate','Time to bed','Wake up time'])
     return sleep_metrics
 
-def sleep_weeklies(obj):
+def process_sleep_weeklies(obj):
     """sleep_weeklies creates a weekly summary across key features based on sleep_dailies
     
     Args:
@@ -108,7 +108,7 @@ def sleep_weeklies(obj):
                 'Time out of bed': ['mean','std']}))
     return df_
 
-def physiology_dailies(obj):
+def process_physiology_dailies(obj):
     """physiology_dailies creates a daily summary across key features from the dialy vital signs
     
     Args:
@@ -133,7 +133,7 @@ def physiology_dailies(obj):
     
     return daily_physiology
 
-def physiology_weeklies(obj):
+def process_physiology_weeklies(obj):
     """physiology_weeklies creates a weekly summary across key features based on physiology_dailies
     
     Args:
@@ -171,24 +171,26 @@ def process_temperature(obj):
     return temperature
 
 def create_weekly_profile():
+    module_path = __file__
     module = "weekly_profile"
-    data_type = 'profile'
-    LocalDataset('activity_dailies',{'motion': dcarte.load('motion','base')},
-                 ['activity_dailies'],data_type , module,[['motion','base']])
-    LocalDataset('activity_weeklies',{'activity_dailies': dcarte.load('activity_dailies','profile')},
-                 ['activity_weeklies'],data_type , module,[['activity_dailies','profile']])
-    LocalDataset('sleep_dailies',{'sleep': dcarte.load('sleep','base')},
-                 ['sleep_dailies'],data_type , module,[['sleep','base']])
-    LocalDataset('sleep_weeklies',{'sleep_dailies': dcarte.load('sleep_dailies','profile')},
-                 ['sleep_weeklies'],data_type , module,[['sleep_dailies','profile']])
-    LocalDataset('physiology_dailies',{'physiology': dcarte.load('physiology','base')},
-                 ['physiology_dailies'],data_type , module,[['physiology','base']])
-    LocalDataset('physiology_weeklies',{'physiology_dailies': dcarte.load('physiology_dailies','profile')},
-                 ['physiology_weeklies'],data_type , module,[['physiology_dailies','profile']])
-    LocalDataset('light',{'Habitat': dcarte.load('Habitat','base')},
-                 ['process_light'],data_type , module,[['Habitat','base']])
-    LocalDataset('temperature',{'Habitat': dcarte.load('Habitat','base')},
-                 ['process_temperature'],data_type , module,[['Habitat','base']])
+    domain = 'profile'
+    parent_datasets = { 'activity_dailies':[['motion','base']], 
+                        'activity_weeklies':[['activity_dailies','profile']], 
+                        'sleep_dailies':[['sleep','base']], 
+                        'sleep_weeklies':[['sleep_dailies','profile']], 
+                        'physiology_dailies':[['physiology','base']], 
+                        'physiology_weeklies':[['physiology_dailies','profile']],
+                        'light':[['Habitat','base']], 
+                        'temperature':[['Habitat','base']]}
+    for dataset in parent_datasets.keys():
+        p_datasets = {d[0]:dcarte.load(*d) for d in parent_datasets[dataset]} 
+        LocalDataset(dataset_name = dataset,
+                        datasets = p_datasets,
+                        pipeline = [f'process_{dataset.lower()}'],
+                        domain = domain,
+                        module = module,
+                        module_path = module_path,
+                        dependencies = parent_datasets[dataset])
     
 if __name__ == "__main__":
     create_weekly_profile()  

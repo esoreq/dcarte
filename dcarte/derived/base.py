@@ -168,7 +168,7 @@ def create_base_datasets():
                         'Sleep':[['sleep_mat','raw']], 
                         'Transitions':[['motion','base']]}
     
-    
+    module_path = __file__
     for dataset in ['Doors', 
                     'Entryway', 
                     'Habitat', 
@@ -185,6 +185,7 @@ def create_base_datasets():
                      pipeline = [f'process_{dataset.lower()}'],
                      domain = domain,
                      module = module,
+                     module_path = module_path,
                      dependencies = parent_datasets[dataset])
     
 if __name__ == "__main__":
