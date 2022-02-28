@@ -172,8 +172,8 @@ def process_temperature(obj):
 
 def create_weekly_profile():
     module_path = __file__
-    since = '2022-02-10'
-    until = '2022-02-20'
+    # since = '2022-02-10'
+    # until = '2022-02-20'
     module = "weekly_profile"
     domain = 'profile'
     parent_datasets = { 'activity_dailies':[['motion','base']], 
@@ -193,8 +193,6 @@ def create_weekly_profile():
                         pipeline = [f'process_{dataset.lower()}'],
                         domain = domain,
                         module = module,
-                        since = since,
-                        until = until, 
                         module_path = module_path,
                         reload = True,
                         dependencies = parent_datasets[dataset])
