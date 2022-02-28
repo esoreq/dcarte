@@ -44,13 +44,14 @@ def load(dataset:str,domain:str,**kwargs):
     
     local_file = f'{data_folder}{sep}{domain}{sep}{dataset}.parquet'
     if path_exists(local_file) and not (dflt['update'] or dflt['reload'] or dflt['reapply']):
-        hdr = read_metadata(local_file)
-        metadata = json.loads(hdr.metadata[b'minder'].decode())
-        if metadata['since'] == dflt['since'] and metadata['until'] == dflt['until']:
-            return read_table(local_file)
-        else: 
-            kwargs['reapply'] = True
-            return load(dataset,domain,**kwargs)
+        return read_table(local_file)
+        # hdr = read_metadata(local_file)
+        # metadata = json.loads(hdr.metadata[b'minder'].decode())
+        # if metadata['since'] == dflt['since'] and metadata['until'] == dflt['until']:
+        #     return read_table(local_file)
+        # else: 
+        #     kwargs['reapply'] = True
+        #     return load(dataset,domain,**kwargs)
     else:     
         info = load_yaml(f'{home}{sep}dcarte{sep}config{sep}{domain}.yaml')
         if domain in ['raw','lookup']:

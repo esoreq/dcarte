@@ -188,21 +188,21 @@ def create_base_datasets():
     module = 'base'
     since = '2022-02-10'
     until = '2022-02-20'
-    parent_datasets = { 'Doors':[['door','raw']], 
-                        'Entryway':[['doors','base']], 
-                        'Habitat':[['environmental','raw'],
-                                   ['device_types','lookup']], 
-                        'Kitchen':[['appliances','raw'],
-                                   ['doors','base'],
-                                   ['activity','raw'],
-                                   ['device_types','lookup']], 
-                        'Motion':[['activity','raw'],
-                                  ['entryway','base'],
-                                  ['sleep','base']], 
+    parent_datasets = { 'Doors'     :[['door','raw']], 
+                        'Entryway'  :[['doors','base']], 
+                        'Habitat'   :[['environmental','raw'],
+                                      ['device_types','lookup']], 
+                        'Kitchen'   :[['appliances','raw'],
+                                      ['doors','base'],
+                                      ['activity','raw'],
+                                      ['device_types','lookup']], 
+                        'Motion'    :[['activity','raw'],
+                                      ['entryway','base'],
+                                      ['sleep','base']], 
                         'Physiology':[['vital_signs','raw'],
                                       ['blood_pressure','raw'],
                                       ['device_types','lookup']],
-                        'Sleep':[['sleep_mat','raw']], 
+                        'Sleep'     :[['sleep_mat','raw']], 
                         'Bed_occupancy':[['sleep','base']], 
                         'Transitions':[['motion','base']]}
     
