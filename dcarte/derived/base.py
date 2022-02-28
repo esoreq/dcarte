@@ -112,7 +112,7 @@ def process_motion(self):
     activity = self.datasets['activity']
     activity = localize_time(activity,['start_date'])
     entryway = self.datasets['entryway']
-    bed_occupancy = mine_bed_occupancy(self.datasets['sleep']).reset_index()
+    bed_occupancy = self.datasets['bed_occupancy']
     fact = ['patient_id','location_name', 'start_date']
     motion = pd.concat([activity[fact], entryway[fact], bed_occupancy[fact]]).\
                         sort_values(['patient_id', 'start_date'])
@@ -169,7 +169,8 @@ def process_sleep(self):
     :return: loclaized sleep metrics timeseries 
     :rtype: pd.DataFrame
     """
-    sleep_mat = self.datasets['sleep_mat']    
+    sleep_mat = self.datasets['sleep_mat']   
+    sleep_mat.snoring = sleep_mat.snoring.astype(bool) 
     sleep_mat = (sleep_mat.
                  set_index('start_date').
                  groupby(['patient_id','home_id']).
@@ -198,7 +199,7 @@ def create_base_datasets():
                                       ['device_types','lookup']], 
                         'Motion'    :[['activity','raw'],
                                       ['entryway','base'],
-                                      ['sleep','base']], 
+                                      ['bed_occupancy','base']], 
                         'Physiology':[['vital_signs','raw'],
                                       ['blood_pressure','raw'],
                                       ['device_types','lookup']],
