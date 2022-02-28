@@ -1,6 +1,7 @@
 import pandas as pd 
 import numpy as np
 import os 
+import json
 from .local import LocalDataset
 from .minder import MinderDataset
 from .utils import (load_yaml, 
@@ -8,7 +9,8 @@ from .utils import (load_yaml,
                     date2iso,
                     merge_dicts,
                     path_exists,
-                    read_table)
+                    read_table,
+                    read_metadata)
 from .config import get_config
 import datetime as dt
 
@@ -42,7 +44,13 @@ def load(dataset:str,domain:str,**kwargs):
     
     local_file = f'{data_folder}{sep}{domain}{sep}{dataset}.parquet'
     if path_exists(local_file) and not (dflt['update'] or dflt['reload'] or dflt['reapply']):
-        return read_table(local_file)
+        hdr = read_metadata(local_file)
+        metadata = json.loads(hdr.metadata[b'minder'].decode())
+        if metadata['since'] == dflt['since'] and metadata['until'] == dflt['until']:
+            return read_table(local_file)
+        else: 
+            kwargs['reapply'] = True
+            return load(dataset,domain,**kwargs)
     else:     
         info = load_yaml(f'{home}{sep}dcarte{sep}config{sep}{domain}.yaml')
         if domain in ['raw','lookup']:
@@ -62,6 +70,7 @@ def load(dataset:str,domain:str,**kwargs):
                      'datasets':parent_datasets,
                      'pipeline':info[dataset]['pipeline'],
                      'module':info[dataset]['module'],
+                     'dependencies':info[dataset]['domains'],
                      'domain':domain} 
             input = merge_dicts(input,dflt)
             output = LocalDataset(**input)

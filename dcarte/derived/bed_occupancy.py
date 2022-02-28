@@ -1,8 +1,5 @@
 import pandas as pd
 import numpy as np
-import os
-import sys
-# This line allows you to clone the repository and skip installing dcarte
 import dcarte
 from dcarte.local import LocalDataset
 
@@ -86,12 +83,13 @@ def create_bed_occupancy():
     pipeline = ['process_outcome']
     domain = 'bed_habits'
     module = 'bed_occupancy'
+    module_path = __file__
     df = LocalDataset(dataset_name = dataset_name,
                       datasets = datasets,
                       pipeline = pipeline,
                       domain = domain,
                       module = module,
-                      module_path = __file__,
+                      module_path = module_path,
                       update = True,
                       dependencies = [['sleep','base']])
 

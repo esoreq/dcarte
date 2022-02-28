@@ -1,4 +1,6 @@
 {
     "autoDocstring.docstringFormat": "sphinx",
-    "python.pythonPath": "/Users/eyalsoreq/github/DCARTE/.venv/bin/python"
+    "python.pythonPath": "/Users/eyalsoreq/github/DCARTE/.venv/bin/python",
+    "grammarly.dialect": "british",
+    "grammarly.domain": "technical"
 }

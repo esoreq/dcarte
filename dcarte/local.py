@@ -94,7 +94,7 @@ class LocalDataset(object):
         if len(self.module_path)>0:
             module_path = self.module_path
         else:
-            module_path = str(Path(Path.cwd()).resolve().glob(self.module+'.py'))
+            module_path = f'{self.data_folder}{sep}recipes{sep}{self.domain}{sep}{self.module}.py'
         recipe_path = f'{self.data_folder}{sep}recipes{sep}{self.domain}{sep}{self.module}.py' 
         if path_exists(recipe_path) and path_exists(module_path):
             # compare both recipies if a local one exists and copy over if they are different 
@@ -108,10 +108,10 @@ class LocalDataset(object):
             shutil.copyfile(module_path, recipe_path)
         else:
             raise ValueError('Module not found')
-        module_dir = os.path.dirname(module_path)
+        module_dir = os.path.dirname(recipe_path)
         if module_dir not in sys.path:
             sys.path.append(module_dir)
-        spec = importlib.util.spec_from_file_location(self.module, module_path)
+        spec = importlib.util.spec_from_file_location(self.module, recipe_path)
         self._module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self._module)
         
@@ -172,11 +172,7 @@ class LocalDataset(object):
 
         [extended_summary]
         """
-        if path_exists(self.local_file):
-            since = self.load_metadata()['since']
-        else:
-            since = self.since
-        self.metadata = {'since': since,
+        self.metadata = {'since': self.since,
                          'until': self.until,
                          'Mac': cfg['mac']}            
     

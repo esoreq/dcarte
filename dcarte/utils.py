@@ -468,6 +468,48 @@ def localize_time(df:pd.DataFrame, factors:list, timezones=None):
     data = pd.concat(data)
     return data
 
+def rolling_window(a, window:int):
+    shape = a.shape[:-1] + (a.shape[-1] - window + 1, window)
+    strides = a.strides + (a.strides[-1],)
+    c = np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
+    seq = ['>'.join(s) for s in c]
+    return seq
+
+def mine_pathway(df:pd.DataFrame,
+                 value:str = 'location_name',
+                 source:str='bed_out',
+                 sink:str='bed_in',
+                 min_dur:float=180,
+                 max_dur:float=900):
+    transitions = mine_transition(df.query(f'{value} in ["{source}","{sink}"]'),
+                                  value=value)
+    if not transitions.empty:
+        events = (transitions.
+                query(f'transition == "{source}>{sink}"').
+                query(f'dur>{min_dur} and dur<{max_dur}'))
+        pattern = []
+        for s,e in zip(events.start_date,events.end_date):
+            tmp = ">".join(df.set_index('start_date').loc[s:e].location_name.values)
+            pattern.append(tmp)
+        events['pathway'] = pattern
+        return events   
+    else:
+        return pd.DataFrame()
+    
+def mine_transition(df,value:str,datetime:str='start_date',window:int=1):
+    df = df.sort_values(datetime).drop_duplicates().reset_index()
+    if not df.empty:
+       dur = (df[datetime].shift(-window) - 
+              df[datetime]).dt.total_seconds().rename('dur')
+       start_date = df[datetime].rename('start_date')
+       end_date = df[datetime].shift(-window).rename('end_date')
+       source = df[value].rename('source')
+       sink = df[value].shift(-window).rename('sink')
+       transition = pd.Series(rolling_window(df[value].values,window+1)).rename('transition')
+       return pd.concat([start_date, end_date, source,sink,transition.reindex(sink.index), dur], axis=1)
+    else:
+       return pd.DataFrame()    
+
 def between_time(df,factor,start_time,end_time):
     index = pd.DatetimeIndex(df[factor])
     return df.iloc[index.indexer_between_time(start_time,end_time)]
@@ -528,6 +570,7 @@ def time_cdf(times:pd.Series, name:str)->pd.Series:
     return vc
 
 
+
 def process_transition(df:pd.DataFrame, groupby:list, datetime:str, value:str, covariates=None) -> pd.DataFrame:
     """process_transition convert a timeseries DataFrame with datetimes to a transition dataframe 
 
@@ -554,21 +597,23 @@ def process_transition(df:pd.DataFrame, groupby:list, datetime:str, value:str, c
                ).dt.total_seconds().rename('dur')
         start_date = subset[datetime].rename('start_date')
         end_date = subset[datetime].shift(-1).rename('end_date')
-
-        transition = (subset[value].astype(
-            str) + '>' + subset[value].shift(-1).astype(str)).rename('transition')
+        source = subset[value].astype(str).rename('source')
+        sink = subset[value].shift(-1).astype(str).rename('sink')
+        transition = (source + '>' + sink).rename('transition')
         if covariates is None:
-            subset = pd.concat([start_date, end_date, transition, dur], axis=1)
+            subset = pd.concat([start_date, end_date, source,sink,transition, dur], axis=1)
         else:
             cov = subset[covariates]
-            subset = pd.concat(
-                [start_date, end_date, cov, transition, dur], axis=1)
+            subset = pd.concat([start_date, end_date , source , sink, cov, transition, dur], axis=1)
+            
         subset.index = index
         subset.index.names = groupby
         data.append(subset.dropna())
     data = pd.concat(data)
     dtypes = {'start_date': 'datetime64',
               'end_date': 'datetime64',
+              'source':'category',
+              'sink':'category',
               'transition': 'category',
               'dur': 'float'}
     return data.astype(dtypes)

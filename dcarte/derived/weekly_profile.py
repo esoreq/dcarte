@@ -172,6 +172,8 @@ def process_temperature(obj):
 
 def create_weekly_profile():
     module_path = __file__
+    since = '2022-02-10'
+    until = '2022-02-20'
     module = "weekly_profile"
     domain = 'profile'
     parent_datasets = { 'activity_dailies':[['motion','base']], 
@@ -183,13 +185,18 @@ def create_weekly_profile():
                         'light':[['Habitat','base']], 
                         'temperature':[['Habitat','base']]}
     for dataset in parent_datasets.keys():
-        p_datasets = {d[0]:dcarte.load(*d) for d in parent_datasets[dataset]} 
+        p_datasets = {d[0]:dcarte.load(*d,
+                                       since=since,
+                                       until=until) for d in parent_datasets[dataset]} 
         LocalDataset(dataset_name = dataset,
                         datasets = p_datasets,
                         pipeline = [f'process_{dataset.lower()}'],
                         domain = domain,
                         module = module,
+                        since = since,
+                        until = until, 
                         module_path = module_path,
+                        reload = True,
                         dependencies = parent_datasets[dataset])
     
 if __name__ == "__main__":

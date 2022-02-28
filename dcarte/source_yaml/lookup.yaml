@@ -20,10 +20,12 @@ patients:
         - id
         - birth_date
         - gender
+        - organization
     dtype: 
         - category
         - float
-        - category             
+        - category  
+        - category            
     datasets:  
         - patients        
 homes:

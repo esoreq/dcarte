@@ -24,6 +24,10 @@ sep = os.sep
 cfg = get_config()
 NOW = date2iso(str(dt.datetime.now()))
 
+
+class MinderException(Exception):
+    pass
+
 @dataclass
 class MinderDataset(object):
     """MinderDataset class handles the downloading of datasets from the minder reserch platform
@@ -91,7 +95,14 @@ class MinderDataset(object):
 
         if not path_exists(self.local_file) or self.reload:
             set_path(self.local_file)
-            self.download_dataset()
+            self.download_dataset()    
+        elif self.reapply:
+            hdr = read_metadata(self.local_file)
+            metadata = json.loads(hdr.metadata[b'minder'].decode())
+            if metadata['since'] == self.since and metadata['until'] == self.until:
+                self.data = read_table(self.local_file)
+            else:
+                self.download_dataset()     
         elif self.update:
             self.update_dataset()
         else:
@@ -109,16 +120,16 @@ class MinderDataset(object):
                                 data=json.dumps(self.data_request),
                                 headers=self.headers,
                                 auth=self.auth)
-        if request.status_code == 401:    
+        if request.status_code in [401,403]:    
             if update_token():
                 self.post_request()
             else:
-                raise Exception('There is a problem with your Token') 
+                raise MinderException('There is a problem with your Token') 
         if request.status_code != 403:
             self.request_id = (request.headers['Content-Location']
                                .split('/')[-1])
         else:
-            raise Exception("You need an active VPN connection")
+            raise MinderException("You need an active VPN connection")
 
     def process_request(self, sleep_time:int=10):
         print(f'Processing {self.dataset_name} ',end=':')
@@ -167,14 +178,16 @@ class MinderDataset(object):
         self.data = self.data.replace({'false':0.0,'true':1.0}).astype(dtypes)
 
     def update_metadata(self):
-        if path_exists(self.local_file):
-            since = self.load_metadata()['since']
-        else:
-            since = self.since
-        self.metadata = {'since': since,
-                         'until': self.until,
-                         "request_id": self.request_id,
-                         'Mac': cfg['mac']}
+        # if 'start_date' in self.data.columns:
+        #     self.metadata = {'since': date2iso(str(self.data['start_date'].min())),
+        #                     'until': date2iso(str(self.data['start_date'].max())),
+        #                     "request_id": self.request_id,
+        #                     'Mac': cfg['mac']}
+        # else:   
+        self.metadata = {'since': self.since,
+                            'until': self.until,
+                            "request_id": self.request_id,
+                            'Mac': cfg['mac']}
 
     def load_metadata(self):
         hdr = read_metadata(self.local_file)

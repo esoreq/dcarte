@@ -112,7 +112,7 @@ def process_motion(self):
     activity = self.datasets['activity']
     activity = localize_time(activity,['start_date'])
     entryway = self.datasets['entryway']
-    bed_occupancy = self.datasets['sleep_event'].rename({'value':'location_name'},axis=1)
+    bed_occupancy = mine_bed_occupancy(self.datasets['sleep']).reset_index()
     fact = ['patient_id','location_name', 'start_date']
     motion = pd.concat([activity[fact], entryway[fact], bed_occupancy[fact]]).\
                         sort_values(['patient_id', 'start_date'])
@@ -142,8 +142,43 @@ def process_transitions(self):
     return motion.reset_index()
 
 
+def mine_bed_occupancy(df):
+    df = (df.
+          assign(location_name=1).
+          set_index('start_date').
+          groupby('patient_id').
+          resample('1T').mean())
+    df = (df.
+          location_name.
+          fillna(0).
+          diff().
+          to_frame().
+          query('location_name in [-1,1]').
+          location_name.
+          map({-1:'Bed_out',1:'Bed_in'}).
+          to_frame())
+    return df.reset_index()
+
+def process_bed_occupancy(self):
+    df = self.datasets['sleep']
+    return  mine_bed_occupancy(df)
+
 def process_sleep(self):
+    """process_sleep force sleep_mat to 1min frequency and localise time 
+
+    :return: loclaized sleep metrics timeseries 
+    :rtype: pd.DataFrame
+    """
     sleep_mat = self.datasets['sleep_mat']    
+    sleep_mat = (sleep_mat.
+                 set_index('start_date').
+                 groupby(['patient_id','home_id']).
+                 resample('1T').
+                 agg({'snoring':'sum',
+                      'heart_rate':'mean',
+                      'respiratory_rate':'mean'}).
+                 dropna().
+                 reset_index())
     sleep_mat = localize_time(sleep_mat,['start_date'])
     return sleep_mat
 
@@ -151,6 +186,8 @@ def process_sleep(self):
 def create_base_datasets():
     domain = 'base'
     module = 'base'
+    since = '2022-02-10'
+    until = '2022-02-20'
     parent_datasets = { 'Doors':[['door','raw']], 
                         'Entryway':[['doors','base']], 
                         'Habitat':[['environmental','raw'],
@@ -161,11 +198,12 @@ def create_base_datasets():
                                    ['device_types','lookup']], 
                         'Motion':[['activity','raw'],
                                   ['entryway','base'],
-                                  ['sleep_event','raw']], 
+                                  ['sleep','base']], 
                         'Physiology':[['vital_signs','raw'],
                                       ['blood_pressure','raw'],
                                       ['device_types','lookup']],
                         'Sleep':[['sleep_mat','raw']], 
+                        'Bed_occupancy':[['sleep','base']], 
                         'Transitions':[['motion','base']]}
     
     module_path = __file__
@@ -173,12 +211,15 @@ def create_base_datasets():
                     'Entryway', 
                     'Habitat', 
                     'Kitchen', 
+                    'Sleep',
+                    'Bed_occupancy',
                     'Motion', 
                     'Physiology',
-                    'Sleep', 
                     'Transitions']:
         
-        p_datasets = {d[0]:dcarte.load(*d) for d in parent_datasets[dataset]} 
+        p_datasets = {d[0]:dcarte.load(*d,
+                                       since=since,
+                                       until=until) for d in parent_datasets[dataset]} 
         
         LocalDataset(dataset_name = dataset,
                      datasets = p_datasets,
@@ -186,6 +227,9 @@ def create_base_datasets():
                      domain = domain,
                      module = module,
                      module_path = module_path,
+                     since = since,
+                     until = until, 
+                     reload = True,
                      dependencies = parent_datasets[dataset])
     
 if __name__ == "__main__":
