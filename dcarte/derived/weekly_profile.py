@@ -185,9 +185,7 @@ def create_weekly_profile():
                         'light':[['Habitat','base']], 
                         'temperature':[['Habitat','base']]}
     for dataset in parent_datasets.keys():
-        p_datasets = {d[0]:dcarte.load(*d,
-                                       since=since,
-                                       until=until) for d in parent_datasets[dataset]} 
+        p_datasets = {d[0]:dcarte.load(*d) for d in parent_datasets[dataset]} 
         LocalDataset(dataset_name = dataset,
                         datasets = p_datasets,
                         pipeline = [f'process_{dataset.lower()}'],
