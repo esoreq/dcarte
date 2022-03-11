@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dcarte"
-version = "0.3.27"
+version = "0.3.29"
 description = "DCARTE is a dataset ingestion tool from DCARTE UK-DRI CAre Research and TEchnology"
 authors = ["eyal soreq"]
 documentation = "https://esoreq.github.io/dcarte/_build/html/index.html"

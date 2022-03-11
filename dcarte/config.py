@@ -194,7 +194,7 @@ def baseline_config(home: Path, root: Path, files:list) -> dict:
         
     dataset_yamels = {file.stem:load_yaml(file) for file in files}
     datasets = [{'domain':domain, 'dataset': dataset} for domain, d in dataset_yamels.items() for dataset in d.keys()]
-    headers = {'Accept': 'text/plain','Content-type': 'application/json',"Connection": "keep-alive","X-Azure-DebugInfo": 1}
+    headers = {'Accept': 'text/plain','Content-type': 'application/json',"Connection": "keep-alive","X-Azure-DebugInfo": '1'}
     cfg = {
         'compression': 'GZIP',
         'data_folder': f"{home}{sep}dcarte{sep}data",
