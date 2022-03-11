@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 import datetime as dt
 import json
 import os
+import logging
 from pathlib import Path
 import pandas as pd
 from time import sleep
@@ -23,8 +24,6 @@ from tqdm import tqdm
 sep = os.sep
 cfg = get_config()
 NOW = date2iso(str(dt.datetime.now()))
-
-
 class MinderException(Exception):
     pass
 
@@ -68,6 +67,7 @@ class MinderDataset(object):
     dtypes: list
     since: str = '2019-04-01'
     until: str = NOW
+    log_level: str = 'DEBUG'
     delay: float = 1
     headers: dict = field(default_factory=lambda: cfg['headers'])
     server: str = cfg['server']
@@ -92,7 +92,12 @@ class MinderDataset(object):
         self.local_file = (f'{self.data_folder}{sep}'
                            f'{self.domain}{sep}'
                            f'{self.dataset_name}.parquet')
-
+        if self.log_level == 'DEBUG':
+            logging.basicConfig(
+                filename=cfg['log_output'], 
+                level=logging.DEBUG,
+                format='%(asctime)s %(levelname)-8s %(message)s',
+                datefmt='%Y-%m-%d %H:%M:%S')
         if not path_exists(self.local_file) or self.reload:
             set_path(self.local_file)
             self.download_dataset()    
@@ -116,20 +121,27 @@ class MinderDataset(object):
         self.save_dataset()
 
     def post_request(self):
-        request = requests.post(self.server,
-                                data=json.dumps(self.data_request),
-                                headers=self.headers,
-                                auth=self.auth)
-        if request.status_code in [401,403]:    
-            if update_token():
-                self.post_request()
+        try:
+            request = requests.post(self.server,
+                                    data=json.dumps(self.data_request),
+                                    headers=self.headers,
+                                    auth=self.auth)
+            if request.status_code in [401,403]:    
+                if update_token():
+                    self.post_request()
+                else:
+                    raise MinderException('There is a problem with your Token') 
+            if request.status_code != 403:
+                self.request_id = (request.headers['Content-Location']
+                                .split('/')[-1])
+                logging.debug(f'{self.request_id} posted')
             else:
-                raise MinderException('There is a problem with your Token') 
-        if request.status_code != 403:
-            self.request_id = (request.headers['Content-Location']
-                               .split('/')[-1])
-        else:
-            raise MinderException("You need an active VPN connection")
+                raise MinderException("You need an active VPN connection")    
+        except BaseException as err:
+            logging.debug(f'Unexpected {self.request_id} {err=},{type(err)=}')
+            raise       
+
+        
 
     def process_request(self, sleep_time:int=10):
         print(f'Processing {self.dataset_name} ',end=':')
@@ -140,14 +152,21 @@ class MinderDataset(object):
         self.csv_url = request_output
 
     def get_output(self):
-        with requests.get(f'{self.server}/{self.request_id}/', auth=self.auth) as request:
-            request_elements = pd.DataFrame(request.json())
-            output = pd.DataFrame()
-            if request_elements.status.iat[0] == 202:
-                    print('*',end='')
-            elif request_elements.status.iat[0] == 200: 
-                if  'output' in request_elements.index: 
-                    output = pd.DataFrame(request_elements.loc['output'].jobRecord)                        
+        try:
+            with requests.get(f'{self.server}/{self.request_id}/', auth=self.auth) as request:
+                request_elements = pd.DataFrame(request.json())
+                output = pd.DataFrame()
+                if request_elements.status.iat[0] == 202:
+                        print('*',end='')
+                elif request_elements.status.iat[0] == 200: 
+                    if  'output' in request_elements.index: 
+                        output = pd.DataFrame(request_elements.loc['output'].jobRecord)
+                        logging.debug(f'{self.request_id} recived with info')                        
+                    else:    
+                        logging.debug(f'{self.request_id} has no info')  
+        except BaseException as err:
+            logging.debug(f'Unexpected {self.request_id} {err=},{type(err)=}')
+            raise
         return output
     
     def persistent_download(self,url,idx):
@@ -176,6 +195,7 @@ class MinderDataset(object):
                                   != self.columns[0]]
         dtypes = dict(zip(self.columns, self.dtypes))
         self.data = self.data.replace({'false':0.0,'true':1.0}).astype(dtypes)
+        logging.debug(f'{self.request_id} was downloaded')
 
     def update_metadata(self):
         # if 'start_date' in self.data.columns:
