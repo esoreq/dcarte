@@ -95,7 +95,7 @@ class LocalDataset(object):
             module_path = self.module_path
         else:
             module_path = f'{cfg["recipes"]}{sep}{self.domain}{sep}{self.module}.py'
-        recipe_path = f'{cfg["recipes"]}{sep}recipes{sep}{self.domain}{sep}{self.module}.py' 
+        recipe_path = f'{cfg["recipes"]}{sep}{self.domain}{sep}{self.module}.py' 
         if path_exists(recipe_path) and path_exists(module_path):
             # compare both recipies if a local one exists and copy over if they are different 
             same = filecmp.cmp(recipe_path, module_path, shallow=False)

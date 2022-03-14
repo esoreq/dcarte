@@ -128,6 +128,7 @@ class MinderDataset(object):
                                     auth=self.auth)
             if request.status_code in [401,403]:    
                 if update_token():
+                    self.auth = BearerAuth(os.getenv('MINDER_TOKEN'))
                     self.post_request()
                 else:
                     raise MinderException('There is a problem with your Token') 
