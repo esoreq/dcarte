@@ -115,7 +115,7 @@ def process_flags(self):
                       suffixes=('df', '_val'), copy=True)
         df.category = df.category.replace({1:'Clinical',2:'Null',3:'Technical'}).astype('category')
         map_type = _type.set_index('code').display.to_dict()
-        map_type = map_type | {8:'Blood Oxygen Saturation',24:'Shingles'}
+        map_type = {**map_type, **{8:'Blood Oxygen Saturation',24:'Shingles'}}
         df.type = df.type.replace(map_type).astype('category')
         df['project_id'] = legacy
         flags.append(df)
@@ -148,7 +148,7 @@ def process_physiology(self):
     devices = ['8310-5','150456','55284-4','29463-7','251837008','163636005','8462-4','8480-6','8867-4']
     df = df.query('type in @devices')
     mapping = device_type.set_index('code').display.to_dict()
-    mapping = mapping | {'8867-4':'raw_heart_rate'}
+    mapping = {**mapping, **{'8867':'raw_heart_rate'}}
     columns = ['datetimeObserved','type','subject','valueQuantity','valueUnit']
     df = df[columns].assign(source=df.type.replace(mapping))
     mapper = {'Body temperature':'raw_body_temperature',
@@ -189,6 +189,7 @@ def create_legacy_datasets():
                      pipeline = [f'process_{dataset}'],
                      domain = domain,
                      module = module,
+                     module_path=module_path,
                      dependencies = [['observation','legacy'],['device_type','legacy']])
     
     
@@ -197,6 +198,7 @@ def create_legacy_datasets():
                  pipeline = ['process_entryway'],
                  domain = domain,
                  module = module,
+                 module_path=module_path,
                  dependencies = [['doors','legacy']])
 
     
