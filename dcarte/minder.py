@@ -126,13 +126,15 @@ class MinderDataset(object):
                                     data=json.dumps(self.data_request),
                                     headers=self.headers,
                                     auth=self.auth)
-            if request.status_code in [401,403]:    
+            if request.status_code == 403:
+                raise MinderException("You need an active VPN connection") 
+            elif request.status_code == 401:    
                 if update_token():
                     self.auth = BearerAuth(os.getenv('MINDER_TOKEN'))
                     self.post_request()
                 else:
                     raise MinderException('There is a problem with your Token') 
-            if request.status_code != 403:
+            elif request.status_code != 403:
                 self.request_id = (request.headers['Content-Location']
                                 .split('/')[-1])
                 logging.debug(f'{self.request_id} posted')
@@ -162,9 +164,14 @@ class MinderDataset(object):
                 elif request_elements.status.iat[0] == 200: 
                     if  'output' in request_elements.index: 
                         output = pd.DataFrame(request_elements.loc['output'].jobRecord)
-                        logging.debug(f'{self.request_id} recived with info')                        
-                    else:    
-                        logging.debug(f'{self.request_id} has no info')  
+                        if output.empty:
+                            logging.debug(f'{self.request_id} has no info')
+                            output = pd.DataFrame([False])
+                        else:    
+                            logging.debug(f'{self.request_id} recived with info')                        
+                else:   
+                    logging.debug(f'Unexpected {request_elements.status.iat[0]} status')        
+                          
         except BaseException as err:
             logging.debug(f'Unexpected {self.request_id} {err=},{type(err)=}')
             raise
