@@ -168,39 +168,61 @@ def process_physiology(self):
 def create_legacy_datasets():
     domain = 'legacy'
     module = 'legacy'
-    LocalDataset('observation',{},['process_observation'],domain,module)
-    observation = dcarte.load('observation','legacy')
-    LocalDataset('device_type',{},['process_device_type'],domain,module)
-    device_type = dcarte.load('device_type','legacy')
-    LocalDataset('flags',{},['process_flags'],domain,module)
-    flags = dcarte.load('flags','legacy')
-    LocalDataset('wellbeing',{},['process_wellbeing'],domain,module)
-    wellbeing = dcarte.load('wellbeing','legacy')
-    
+    module_path = __file__
+
+    LocalDataset(dataset_name='observation',
+                 datasets={},
+                 pipeline=['process_observation'],
+                 domain=domain,
+                 module=module,
+                 module_path=module_path)
+    observation = dcarte.load('observation', 'legacy')
+
+    LocalDataset(dataset_name='device_type',
+                 datasets={},
+                 pipeline=['process_device_type'],
+                 domain=domain,
+                 module=module,
+                 module_path=module_path)
+    device_type = dcarte.load('device_type', 'legacy')
+
+    LocalDataset(dataset_name='flags',
+                 datasets={},
+                 pipeline=['process_flags'],
+                 domain=domain,
+                 module=module,
+                 module_path=module_path)
+    flags = dcarte.load('flags', 'legacy')
+
+    LocalDataset(dataset_name='wellbeing',
+                 datasets={},
+                 pipeline=['process_wellbeing'],
+                 domain=domain,
+                 module=module,
+                 module_path=module_path)
+    wellbeing = dcarte.load('wellbeing', 'legacy')
+
     for dataset in ['motion',
                     'doors',
                     'physiology',
                     'temperature',
                     'light']:
-        
-        LocalDataset(dataset_name= dataset,
-                     datasets = {'observation': observation,
-                                 'device_type': device_type},
-                     pipeline = [f'process_{dataset}'],
-                     domain = domain,
-                     module = module,
+        LocalDataset(dataset_name=dataset,
+                     datasets={'observation': observation,
+                               'device_type': device_type},
+                     pipeline=[f'process_{dataset}'],
+                     domain=domain,
+                     module=module,
                      module_path=module_path,
-                     dependencies = [['observation','legacy'],['device_type','legacy']])
-    
-    
-    LocalDataset(dataset_name = 'entryway',
-                 datasets = {'doors': dcarte.load('doors','legacy')},
-                 pipeline = ['process_entryway'],
-                 domain = domain,
-                 module = module,
-                 module_path=module_path,
-                 dependencies = [['doors','legacy']])
+                     dependencies=[['observation', 'legacy'], ['device_type', 'legacy']])
 
+    LocalDataset(dataset_name='entryway',
+                 datasets={'doors': dcarte.load('doors', 'legacy')},
+                 pipeline=['process_entryway'],
+                 domain=domain,
+                 module=module,
+                 module_path=module_path,
+                 dependencies=[['doors', 'legacy']])
     
 if __name__ == "__main__":
     create_legacy_datasets()  
