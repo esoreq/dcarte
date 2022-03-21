@@ -100,14 +100,9 @@ class MinderDataset(object):
                 datefmt='%Y-%m-%d %H:%M:%S')
         if not path_exists(self.local_file) or self.reload:
             set_path(self.local_file)
-            self.download_dataset()    
+            self.download_dataset()               
         elif self.reapply:
-            hdr = read_metadata(self.local_file)
-            metadata = json.loads(hdr.metadata[b'minder'].decode())
-            if metadata['since'] == self.since and metadata['until'] == self.until:
-                self.data = read_table(self.local_file)
-            else:
-                self.download_dataset()     
+            self.data = read_table(self.local_file)
         elif self.update:
             self.update_dataset()
         else:
