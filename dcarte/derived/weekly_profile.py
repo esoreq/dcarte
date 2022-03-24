@@ -117,19 +117,23 @@ def process_physiology_dailies(obj):
     Returns:
         pd.DataFrame: a pandas dataframe with patient_id 
     """
-    df = obj.datasets['physiology']
-    factors = ['raw_heart_rate','raw_body_weight','raw_body_mass_index',
-            'raw_body_temperature','diastolic_bp','systolic_bp','raw_total_body_fat']
-    daily_physiology = df.query("source in @factors")
+    dp = obj.datasets['physiology']
+    ds = obj.datasets['sleep_dailies']
+    factors = ['raw_heart_rate','raw_body_weight','raw_body_mass_index','raw_oxygen_saturation',
+               'raw_body_temperature','diastolic_bp','systolic_bp','raw_total_body_fat']
+    daily_physiology = dp.query("source in @factors")
     daily_physiology = (daily_physiology.reset_index(drop=True).
-                            groupby(['patient_id','source']).
-                            resample('1D',on='start_date',offset='12h').
-                            agg({'value':'mean'}).
-                            swaplevel(-2,-1).
-                            unstack().
-                            droplevel(0,axis=1))
-    daily_physiology = daily_physiology[factors][daily_physiology[factors].isnull().sum(axis=1)<len(factors)]
-    daily_physiology.columns = ['Heart rate','Body_weight','BMI','Temperature','Diastolic_BP','Systolic_BP', 'Body_Fat']
+                        groupby(['patient_id', 'source']).
+                        resample('1D', on='start_date', offset='12h').
+                        agg({'value': 'mean'}).
+                        swaplevel(-2, -1).
+                        unstack().
+                        droplevel(0, axis=1))
+    daily_physiology = daily_physiology[factors]
+    daily_physiology.columns = ['Heart_rate','Weight','BMI','Oxygen_Saturation','Temperature','Diastolic_BP','Systolic_BP', 'Body_Fat']
+    ds = ds[['Breathing rate','Heart rate']]
+    ds.columns = ['RR_rest', 'HR_rest']
+    daily_physiology = daily_physiology.join(ds)
     
     return daily_physiology
 
@@ -180,7 +184,7 @@ def create_weekly_profile():
                         'activity_weeklies':[['activity_dailies','profile']], 
                         'sleep_dailies':[['sleep','base']], 
                         'sleep_weeklies':[['sleep_dailies','profile']], 
-                        'physiology_dailies':[['physiology','base']], 
+                        'physiology_dailies':[['physiology','base'],['sleep_dailies','profile']], 
                         'physiology_weeklies':[['physiology_dailies','profile']],
                         'light':[['Habitat','base']], 
                         'temperature':[['Habitat','base']]}

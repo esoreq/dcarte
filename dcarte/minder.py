@@ -3,6 +3,7 @@ import datetime as dt
 import json
 import os
 import logging
+import numpy as np
 from pathlib import Path
 import pandas as pd
 from time import sleep
@@ -193,9 +194,7 @@ class MinderDataset(object):
             df = self.persistent_download(url,idx)
             data.append(df)
         self.data = pd.concat(data).reset_index(drop=True)
-        if (self.data[self.columns[0]] == self.columns[0]).any():
-            self.data = self.data[self.data[self.columns[0]]
-                                  != self.columns[0]]
+        self.data = self.data[np.any(self.data.values==self.data.columns.values.reshape(1,-1),axis=1)==False]
         dtypes = dict(zip(self.columns, self.dtypes))
         self.data = self.data.replace({'false':0.0,'true':1.0}).astype(dtypes)
         logging.debug(f'{self.request_id} was downloaded')
@@ -208,9 +207,9 @@ class MinderDataset(object):
         #                     'Mac': cfg['mac']}
         # else:   
         self.metadata = {'since': self.since,
-                            'until': self.until,
-                            "request_id": self.request_id,
-                            'Mac': cfg['mac']}
+                         'until': self.until,
+                         "request_id": self.request_id,
+                         'Mac': cfg['mac']}
 
     def load_metadata(self):
         hdr = read_metadata(self.local_file)
