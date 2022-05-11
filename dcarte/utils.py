@@ -59,6 +59,37 @@ def segment_freq(v:pd.Series,
     return vc
 
 
+
+def dst_correction(df, dst_correct=True, years=[2018, 2019, 2020, 2021,2022], shift_time=12):
+    ''' day light saving correction 
+    Goes over timestamps and identifies dst windows and shifts them back 1 hour
+    this is to correct utc timestamps applied at midday before the corrections
+    to avoid removing sleep data
+    Dr Eyal Soreq 06.04.21 UKDRI
+    '''
+    if dst_correct:
+        
+        df = df.set_index('start_date').sort_index()
+        dst = pd.DataFrame({'year': years,
+                            "dst_start": [last_sunday_date(y, month=3) for y in years],
+                            "dst_end": [last_sunday_date(y, month=10) for y in years]})
+        dates = dst[["dst_start", "dst_end"]].values.reshape(-1)
+        _df = []
+        for ii, (st, et) in enumerate(zip(dates[:-1], dates[1:])):
+            shift = -1 if (st.month <= 11 and st.month >= 4) else 0
+            st = str((st-timedelta(hours=shift_time))[0])
+            et = str((et-timedelta(hours=shift_time))[0])
+            _df.append(df[st:et].shift(shift, 'H'))
+        df = pd.concat(_df)
+        # localize_time(timezones, df, factors)
+    return df
+
+
+def last_sunday_date(year=2019, month=10):
+    last_sunday = max(week[-1] for week in calendar.monthcalendar(year, month))
+    return pd.DatetimeIndex([f'{year}-{month}-{last_sunday}'])
+
+
 def segment_summary(vc,shift=180):
     """segment_summary [summary]
 
@@ -253,6 +284,7 @@ def write_table(data: pd.DataFrame,
     """
     if filename.split('.')[-1] != 'parquet':
         filename = f'{filename}.parquet'
+    data = data[data.columns.drop_duplicates()]    
     table = pa.Table.from_pandas(data)
     table = inject_metadata(table, meta_content)
     pq.write_table(table, filename, compression=compression)
@@ -477,6 +509,7 @@ def rolling_window(a, window:int):
     seq = ['>'.join(s) for s in c]
     return seq
 
+
 def mine_pathway(df:pd.DataFrame,
                  value:str = 'location_name',
                  source:str='bed_out',
@@ -499,6 +532,7 @@ def mine_pathway(df:pd.DataFrame,
         return pd.DataFrame()
     
 def mine_transition(df,value:str,datetime:str='start_date',window:int=1):
+    # TODO: add categorical capabilites
     df = df.sort_values(datetime).drop_duplicates().reset_index()
     if not df.empty:
        dur = (df[datetime].shift(-window) - 
@@ -533,7 +567,7 @@ def epoch_to_local(dt: pd.Series, tz: str = 'Europe/London', unit: str = 's', sh
     """
     dt = pd.to_datetime(dt, unit=unit, utc=True)
     offset = pd.Series([t.utcoffset() for t in dt.dt.tz_localize(
-        tz, ambiguous=True, nonexistent='shift_forward')], index=dt.index)
+        tz, ambiguous='infer', nonexistent='shift_backward')], index=dt.index)
     return dt + offset + pd.Timedelta(hours=shift)
 
 def utc_to_local(dt:pd.Series, tz:str='Europe/London', shift:int=-2):
@@ -549,7 +583,7 @@ def utc_to_local(dt:pd.Series, tz:str='Europe/London', shift:int=-2):
     """
     dt = pd.to_datetime(dt,utc=True).dt.tz_localize(None)
     offset = pd.Series([t.utcoffset() for t in dt.dt.tz_localize(
-        tz, ambiguous=True, nonexistent='shift_forward')], index=dt.index)
+        tz, ambiguous='infer', nonexistent='shift_backward')], index=dt.index)
     return dt + offset + pd.Timedelta(hours=shift)
 
 

@@ -144,19 +144,20 @@ def process_transitions(self):
 
 def mine_bed_occupancy(df):
     df = (df.
-          assign(location_name=1).
-          set_index('start_date').
-          groupby('patient_id').
-          resample('1T').mean())
-    df = (df.
-          location_name.
-          fillna(0).
-          diff().
-          to_frame().
-          query('location_name in [-1,1]').
-          location_name.
-          map({-1:'Bed_out',1:'Bed_in'}).
-          to_frame())
+        assign(location_name=1).
+        set_index('start_date').
+        groupby('patient_id').
+        resample('1T').
+        sum().
+        groupby('patient_id').
+        location_name.
+        diff().
+        fillna(1).
+        to_frame().
+        query('location_name in [-1,1]').
+        location_name.
+        map({-1: 'Bed_out', 1: 'Bed_in'}).
+        to_frame())
     return df.reset_index()
 
 def process_bed_occupancy(self):
@@ -171,15 +172,18 @@ def process_sleep(self):
     """
     sleep_mat = self.datasets['sleep_mat']   
     sleep_mat.snoring = sleep_mat.snoring.astype(bool) 
-    sleep_mat = (sleep_mat.
-                 set_index('start_date').
-                 groupby(['patient_id','home_id']).
-                 resample('1T').
-                 agg({'snoring':'sum',
-                      'heart_rate':'mean',
-                      'respiratory_rate':'mean'}).
-                 dropna().
-                 reset_index())
+    sleep_mat_ =  (sleep_mat.
+                set_index('start_date').
+                groupby(['patient_id']).
+                resample('1T').
+                agg({'snoring':'sum',
+                     'heart_rate':'mean',
+                     'respiratory_rate':'mean'}).
+                    dropna().
+                    reset_index())
+    keys = ['patient_id','start_date','state']
+    sleep_mat = pd.merge(sleep_mat_,sleep_mat[keys],how='left',left_on=keys[:2],right_on=keys[:2])
+    sleep_mat.snoring = sleep_mat.snoring>0
     sleep_mat = localize_time(sleep_mat,['start_date'])
     return sleep_mat
 
@@ -226,7 +230,7 @@ def create_base_datasets():
                      domain = domain,
                      module = module,
                      module_path = module_path,
-                     reload = True,
+                     reapply = True,
                      dependencies = parent_datasets[dataset])
     
 if __name__ == "__main__":

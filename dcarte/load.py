@@ -11,6 +11,7 @@ from .utils import (load_yaml,
                     path_exists,
                     read_table,
                     read_metadata)
+from pathlib import Path
 from .config import get_config
 import datetime as dt
 
@@ -39,19 +40,27 @@ def load(dataset:str,domain:str,**kwargs):
     home = cfg['home']
     data_folder = cfg['data_folder']
     datasets = pd.DataFrame(cfg['domains'])
+    
+        
     if not (datasets == np.array([dataset,domain])).all(axis=1).any():
         raise Exception(f"Sorry, {dataset} is not a registered dataset in {domain} domain in dcarte")
     
+
+        
     local_file = f'{data_folder}{sep}{domain}{sep}{dataset}.parquet'
-    if path_exists(local_file) and not (dflt['update'] or dflt['reload'] or dflt['reapply']):
-        return read_table(local_file)
-        # hdr = read_metadata(local_file)
-        # metadata = json.loads(hdr.metadata[b'minder'].decode())
-        # if metadata['since'] == dflt['since'] and metadata['until'] == dflt['until']:
-        #     return read_table(local_file)
-        # else: 
-        #     kwargs['reapply'] = True
-        #     return load(dataset,domain,**kwargs)
+    if (dflt['reapply'] or dflt['reload']) and path_exists(local_file):
+       dflt['reapply'] = False
+       Path(local_file).unlink()
+       return load(dataset,domain,**dflt)
+
+    if path_exists(local_file):
+        if not (dflt['reload'] or dflt['reapply'] or dflt['update']):
+            return read_table(local_file)
+        elif dflt['update']:
+            hdr = read_metadata(local_file)
+            metadata = json.loads(hdr.metadata[b'minder'].decode())
+            if pd.to_datetime(metadata['until'])+pd.Timedelta(hours=dflt.delay) > pd.to_datetime(dflt['until']):
+                return read_table(local_file)
     else:     
         info = load_yaml(f'{home}{sep}dcarte{sep}config{sep}{domain}.yaml')
         if domain in ['raw','lookup']:
@@ -65,6 +74,8 @@ def load(dataset:str,domain:str,**kwargs):
         else:
             dependencies = pd.DataFrame(info[dataset]['domains'])
             parent_datasets = {}
+            if dflt['reapply']:
+               dflt['reapply'] = False
             for _,row in dependencies.iterrows():
                 parent_datasets[row.dataset] = load(row.dataset,row.domain, **dflt)
             input = {'dataset_name':dataset,

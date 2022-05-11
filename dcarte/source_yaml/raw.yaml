@@ -1,3 +1,66 @@
+encounter:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - end_date
+        - type
+        - reason
+    dtype: 
+        - category
+        - category
+        - datetime64
+        - datetime64
+        - category
+        - object 
+    datasets:
+        - encounter    
+questionnaire:
+    columns: 
+        - home_id
+        - patient_id
+        - questionnaire
+        - question
+        - answer
+        - type
+        - authored
+    dtype: 
+        - category
+        - category
+        - object
+        - object
+        - object
+        - object 
+        - object
+    datasets:
+        - questionnaire_responses    
+raw_wearable_walking:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - end_date
+        - steps
+        - elevation
+        - elevation_unit
+        - distance
+        - distance_unit
+        - calories
+        - calories_unit
+    dtype: 
+        - category
+        - category
+        - datetime64
+        - datetime64
+        - int
+        - int
+        - object
+        - int
+        - object
+        - int
+        - object    
+    datasets:
+        - questionnaire_responses         
 vital_signs:
     columns: 
         - home_id
