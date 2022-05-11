@@ -56,38 +56,43 @@ def load(dataset:str,domain:str,**kwargs):
     if path_exists(local_file):
         if not (dflt['reload'] or dflt['reapply'] or dflt['update']):
             return read_table(local_file)
-        elif dflt['update']:
+    
+    if path_exists(local_file):
+        hdr = read_metadata(local_file)
+        metadata = json.loads(hdr.metadata[b'minder'].decode())
+        update = pd.to_datetime(metadata['until'])+pd.Timedelta(hours=dflt['delay']) > pd.to_datetime(dflt['until'])
+        if not update:
             hdr = read_metadata(local_file)
             metadata = json.loads(hdr.metadata[b'minder'].decode())
-            if pd.to_datetime(metadata['until'])+pd.Timedelta(hours=dflt.delay) > pd.to_datetime(dflt['until']):
+            if pd.to_datetime(metadata['until'])+pd.Timedelta(hours=dflt['delay']) > pd.to_datetime(dflt['until']):
                 return read_table(local_file)
-    else:     
-        info = load_yaml(f'{home}{sep}dcarte{sep}config{sep}{domain}.yaml')
-        if domain in ['raw','lookup']:
-            input = {'dataset_name':dataset,
-                     'datasets':info[dataset]['datasets'],
-                     'columns':info[dataset]['columns'],
-                     'dtypes':info[dataset]['dtype'],
-                     'domain':domain} 
-            input = merge_dicts(input,dflt)
-            output = MinderDataset(**input)
-        else:
-            dependencies = pd.DataFrame(info[dataset]['domains'])
-            parent_datasets = {}
-            if dflt['reapply']:
-               dflt['reapply'] = False
-            for _,row in dependencies.iterrows():
-                parent_datasets[row.dataset] = load(row.dataset,row.domain, **dflt)
-            input = {'dataset_name':dataset,
-                     'datasets':parent_datasets,
-                     'pipeline':info[dataset]['pipeline'],
-                     'module':info[dataset]['module'],
-                     'dependencies':info[dataset]['domains'],
-                     'domain':domain} 
-            input = merge_dicts(input,dflt)
-            output = LocalDataset(**input)
+         
+    info = load_yaml(f'{home}{sep}dcarte{sep}config{sep}{domain}.yaml')
+    if domain in ['raw','lookup']:
+        input = {'dataset_name':dataset,
+                    'datasets':info[dataset]['datasets'],
+                    'columns':info[dataset]['columns'],
+                    'dtypes':info[dataset]['dtype'],
+                    'domain':domain} 
+        input = merge_dicts(input,dflt)
+        output = MinderDataset(**input)
+    else:
+        dependencies = pd.DataFrame(info[dataset]['domains'])
+        parent_datasets = {}
+        if dflt['reapply']:
+            dflt['reapply'] = False
+        for _,row in dependencies.iterrows():
+            parent_datasets[row.dataset] = load(row.dataset,row.domain, **dflt)
+        input = {'dataset_name':dataset,
+                    'datasets':parent_datasets,
+                    'pipeline':info[dataset]['pipeline'],
+                    'module':info[dataset]['module'],
+                    'dependencies':info[dataset]['domains'],
+                    'domain':domain} 
+        input = merge_dicts(input,dflt)
+        output = LocalDataset(**input)
 
-        return output.data
+    return output.data
 
 def get_defaults(cfg,**kwargs):
     """get_defaults [summary]
