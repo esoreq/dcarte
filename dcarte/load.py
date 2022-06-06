@@ -19,20 +19,37 @@ NOW = date2iso(str(dt.datetime.now()))
 sep = os.sep
 
 @timer('Loading')
-def load(dataset:str,domain:str,**kwargs):
-    """load [summary]
+def load(dataset:str,domain:str,**kwargs)->pd.DataFrame:
+    """load a dataset from the domain given. Note that 
+    ```update=True``` and ```reload=True``` have different behaviour, 
+    please read the descriptions of the arguments to understand what
+    is appropriate for your use-case.
 
-    [extended_summary]
+
+    Example:
+
+    ```
+    >>> movement_data = dcarte.load('motion', 'base')
+
+    ```
 
     Args:
-        dataset (str): [description]
-        domain (str): [description]
+        dataset (str): The name of the dataset to load.
+        domain (str): The domain that the dataset is contained within.
+
+    KwArgs:
+        since (str): The date to load the data from. The format should be ```'[YYYY]-[MM]-[DD]T[hh]:[mm]:[ss]'``` or ``'[YYYY]-[MM]-[DD]```. Defaults to ```'2019-04-01'```.
+        until (str): The date to load the data to. The format should be ```'[YYYY]-[MM]-[DD]T[hh]:[mm]:[ss]'``` or ``'[YYYY]-[MM]-[DD]```. If the date given is sooner than the data downloaded, the data will not update unless ```update=True```. Defaults to the current date and time.
+        update (bool): Whether to update the data when loading, by downloading the recent data from the server and re-running the script that produces the given domain. Defaults to ```False```.
+        reload (bool): Whether to re-download all data from the server and to re-run the script that feeds and produces this dataset. Defaults to ```False```.
+        reapply (bool): Whether to re-run the script that produces this dataset. Defaults to ```False```.
+
 
     Raises:
-        Exception: [description]
+        Exception: If the ```dataset``` is not contained in the ```domain```. 
 
     Returns:
-        [type]: [description]
+        ```pandas.DataFrame```: The loaded dataset.
     """
     dataset,domain = dataset.lower(),domain.lower()
     cfg = get_config()
