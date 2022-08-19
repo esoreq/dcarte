@@ -170,11 +170,15 @@ def get_mac() -> str:
 
 
 def get_token() -> str:
-    """get_token opens the access-tokens website to create a unique REST token 
+    """get_token returns MINDER_TOKEN from the enviroment variable
+    or opens the access-tokens website to create a unique REST token 
 
     Returns:
         str: a token generated at https://research.minder.care/portal/access-tokens
     """
+    if os.getenv('MINDER_TOKEN'):
+        return os.getenv('MINDER_TOKEN')
+
     webbrowser.open('https://research.minder.care/portal/access-tokens')
     print('Please go to https://research.minder.care/portal/access-tokens to generate a token and copy it into the input bar')
     token = getpass.getpass(prompt='Token: ')
