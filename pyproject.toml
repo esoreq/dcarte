@@ -4,7 +4,7 @@ version = "0.3.38"
 description = "DCARTE is a dataset ingestion tool from DCARTE UK-DRI CAre Research and TEchnology"
 authors = ["eyal soreq"]
 documentation = "https://esoreq.github.io/dcarte/_build/html/index.html"
-repository = "https://github.com/esoreq/dcarte"
+repository = "https://github.com/MathildaSu/dcarte"
 
 
 [tool.poetry.dependencies]
