@@ -34,7 +34,7 @@ def get_config(config_file : str = f'{sep}dcarte{sep}config.yaml',
     """
     if path_exists(str(home)+config_file):
         if not check_config(home):
-            create_config(home, root, dcarte_home,False)
+            create_config(home, root, dcarte_home)
         # check if any updated yaml version exists in the toolbox folder
         source_yaml = get_source_yaml(dcarte_home)
         compare_source_yaml(home,source_yaml) 
