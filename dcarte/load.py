@@ -32,7 +32,6 @@ def load(dataset:str,domain:str,**kwargs):
     Args:
         dataset (str): The name of the dataset to load.
         domain (str): The domain that the dataset is contained within.
-    KwArgs:
         since (str): The date to load the data from. The format should be '[YYYY]-[MM]-[DD]T[hh]:[mm]:[ss]' or '[YYYY]-[MM]-[DD]'. Defaults to '2019-04-01'.
         until (str): The date to load the data to. The format should be '[YYYY]-[MM]-[DD]T[hh]:[mm]:[ss]' or '[YYYY]-[MM]-[DD]'. If the date given is sooner than the data downloaded, the data will not update unless update=True. Defaults to the current date and time.
         update (bool): Whether to update the data when loading, by downloading the recent data from the server and re-running the script that produces the given domain. Defaults to False.
