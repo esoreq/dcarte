@@ -3,6 +3,7 @@ import json
 from functools import wraps
 import collections
 import typing
+from typing import List,Union,Dict,Any
 
 from copy import deepcopy
 import time
@@ -20,25 +21,37 @@ import pandas as pd
 import numpy as np
 
 
-def segment_freq(v:pd.Series,
-                 window_length:int=59,
-                 polyorder:int=1,
-                 r:int=10,
-                 lb:float=0.0,
-                 ub:float=360.0,
-                 step:float=0.25)-> pd.DataFrame:
-    """segment_freq [summary]
+def segment_freq(v: pd.Series,
+                 window_length: int = 59,
+                 polyorder: int = 1,
+                 r: int = 10,
+                 lb: float = 0.0,
+                 ub: float = 360.0,
+                 step: float = 0.25) -> pd.DataFrame:
+    """
+    Segment a pandas series into a frequency polygon using a sliding window and a Savitzky-Golay filter.
 
-    [extended_summary]
+    Parameters
+    ----------
+    v : pandas.Series
+        A series of values to segment.
+    window_length : int, optional
+        Length of the window used by the Savitzky-Golay filter. Must be odd and positive. Default is 59.
+    polyorder : int, optional
+        Order of the polynomial used by the Savitzky-Golay filter. Default is 1.
+    r : int, optional
+        Radius of the neighborhood used by the segmentation algorithm. Default is 10.
+    lb : float, optional
+        Lower bound of the range of values to segment. Default is 0.0.
+    ub : float, optional
+        Upper bound of the range of values to segment. Default is 360.0.
+    step : float, optional
+        Step size of the range of values to segment. Default is 0.25.
 
-    Args:
-        v (pd.Series): [description]
-        window_length (int, optional): [description]. Defaults to 59.
-        polyorder (int, optional): [description]. Defaults to 1.
-        r (int, optional): [description]. Defaults to 10.
-
-    Returns:
-        pd.DataFrame: [description]
+    Returns
+    -------
+    pandas.DataFrame
+        A dataframe with the frequency polygon values and labels for each bin.
     """
     ix = np.arange(lb,ub,step)
     vc = v.value_counts(normalize=False).sort_index().rename('freq').to_frame()
@@ -60,13 +73,27 @@ def segment_freq(v:pd.Series,
 
 
 
-def dst_correction(df, dst_correct=True, years=[2018, 2019, 2020, 2021,2022], shift_time=12):
-    ''' day light saving correction 
-    Goes over timestamps and identifies dst windows and shifts them back 1 hour
-    this is to correct utc timestamps applied at midday before the corrections
-    to avoid removing sleep data
+def dst_correction(df: pd.DataFrame, dst_correct: bool = True, years: list[int] = [2018, 2019, 2020, 2021, 2022], shift_time: int = 12) -> pd.DataFrame:
+    """
+    Daylight saving correction.
+
+    Goes over timestamps and identifies dst windows and shifts them back 1 hour. This is to correct UTC timestamps applied
+    at midday before the corrections to avoid removing sleep data.
+
+    Args:
+        df (pd.DataFrame): DataFrame with a 'start_date' column to be corrected.
+        dst_correct (bool, optional): Flag to indicate if the correction should be applied. Defaults to True.
+        years (list[int], optional): A list of years to apply the correction. Defaults to [2018, 2019, 2020, 2021, 2022].
+        shift_time (int, optional): The number of hours to shift the data. Defaults to 12.
+
+    Returns:
+        pd.DataFrame: A DataFrame with corrected timestamps.
+
+    Examples:
+        >>> df = pd.DataFrame({'start_date': pd.date_range(start='2022-01-01', end='2022-01-02', freq='H')})
+        >>> dst_correction(df)
     Dr Eyal Soreq 06.04.21 UKDRI
-    '''
+    """
     if dst_correct:
         
         df = df.set_index('start_date').sort_index()
@@ -85,18 +112,38 @@ def dst_correction(df, dst_correct=True, years=[2018, 2019, 2020, 2021,2022], sh
     return df
 
 
-def last_sunday_date(year=2019, month=10):
-    last_sunday = max(week[-1] for week in calendar.monthcalendar(year, month))
-    return pd.DatetimeIndex([f'{year}-{month}-{last_sunday}'])
-
-
-def segment_summary(vc,shift=180):
-    """segment_summary [summary]
-
-    [extended_summary]
+def last_sunday_date(year: int = 2019, month: int = 10) -> pd.DatetimeIndex:
+    """
+    Returns the last Sunday of the given year and month.
 
     Args:
-        vc ([type]): [description]
+        year (int, optional): The year to look for the last Sunday. Defaults to 2019.
+        month (int, optional): The month to look for the last Sunday. Defaults to 10.
+
+    Returns:
+        pd.DatetimeIndex: A DatetimeIndex object containing the last Sunday of the given year and month.
+    """
+    last_sunday = max(week[-1] for week in calendar.monthcalendar(year, month))
+    return pd.DatetimeIndex([f"{year}-{month}-{last_sunday}"])
+
+
+def segment_summary(vc: pd.DataFrame, shift: int = 180) -> pd.DataFrame:
+    """Computes summary statistics for frequency segments.
+
+    Computes summary statistics for frequency segments based on the provided
+    frequency data in `vc`. This function groups frequency data into segments
+    based on their labels and calculates summary statistics including start
+    time, end time, and proportion for each segment.
+
+    Args:
+        vc: A pandas DataFrame with columns 'labels' and 'freq' representing
+            the frequency data to be summarized.
+        shift: An integer representing the amount to shift the start and end
+            times of each segment.
+
+    Returns:
+        A pandas DataFrame containing summary statistics for each segment,
+        including start time, end time, and proportion.
     """
     def f(x): return dt.time(*angles_to_time(x))
     summary = (vc.reset_index().
@@ -109,41 +156,66 @@ def segment_summary(vc,shift=180):
 
     return summary
 
-def round_to_quarters(number):
-    """Round a number to the closest half integer.
-    >>> round_to_quarters(1.3)
-    1.25
-    >>> round_to_quarters(2.6)
-    2.5
-    >>> round_to_quarters(3.0)
-    3.0
-    >>> round_to_quarters(4.1)
-    4.0"""
+def round_to_quarters(number: float) -> float:
+    """
+    Round a number to the closest half integer.
+
+    Args:
+        number (float): The number to round.
+
+    Returns:
+        float: The rounded number.
+        
+    Examples:
+        >>> round_to_quarters(1.3)
+        1.25
+        >>> round_to_quarters(2.6)
+        2.5
+        >>> round_to_quarters(3.0)
+        3.0
+        >>> round_to_quarters(4.1)
+        4.0
+    """
 
     return np.round(number * 4) / 4
 
-def center_angle(x): 
+def center_angle(x: float) -> float:
+    """
+    Centers the angle values in the given array around 0 radians by shifting them by π radians.
+
+    sql
+    Copy code
+    Args:
+        x (array-like): Input array of angles in degrees.
+
+    Returns:
+        array-like: Array of centered angles in degrees.
+    """
     return (np.deg2rad(x) + np.pi) % (2*np.pi) - np.pi
 
 
 def round_to_halves(number):
     """Round a number to the closest half integer.
-    >>> round_to_halves(1.3)
-    1.5
-    >>> round_to_halves(2.6)
-    2.5
-    >>> round_to_halves(3.0)
-    3.0
-    >>> round_to_halves(4.1)
-    4.0"""
+
+    Args:
+        number (float): The number to be rounded.
+
+    Returns:
+        float: The rounded number.
+    """
 
     return np.round(number * 2) / 2
 
 
 def timer(desc : str = None):
-    """timer is a wrapper decorator to report functions duration
+    """A decorator that reports the duration of a function.
+
     Args:
-        desc (str, optional): [description line to print to sdout]. Defaults to None.
+        desc (str, optional): A description to print to stdout.
+
+    Returns:
+        function: The decorated function.
+
     """
     def wrapper(fun):
         @wraps(fun)
@@ -502,7 +574,23 @@ def localize_time(df:pd.DataFrame, factors:list, timezones=None):
     data = pd.concat(data)
     return data
 
-def rolling_window(a, window:int):
+def rolling_window(a: np.ndarray, window: int) -> List[str]:
+    """
+    Creates a rolling window of a given size over a 1D numpy array.
+
+    Args:
+        a (np.ndarray): 1D numpy array to create rolling window over
+        window (int): size of rolling window
+
+    Returns:
+        List of strings where each string represents a rolling window of length `window` over the array `a`,
+        separated by `>`.
+
+    Example:
+        >>> a = np.array([1, 2, 3, 4, 5])
+        >>> rolling_window(a, 3)
+        ['1>2>3', '2>3>4', '3>4>5']
+    """
     shape = a.shape[:-1] + (a.shape[-1] - window + 1, window)
     strides = a.strides + (a.strides[-1],)
     c = np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
@@ -515,7 +603,44 @@ def mine_pathway(df:pd.DataFrame,
                  source:str='bed_out',
                  sink:str='bed_in',
                  min_dur:float=180,
-                 max_dur:float=900):
+                 max_dur:float=900) -> pd.DataFrame:
+    """Mine pathways between two locations in a DataFrame of events.
+
+    This function takes a DataFrame of events and looks for transitions between two locations, identified by their name in
+    the column specified by the `value` parameter, that start at `source` and end at `sink`. The duration of each transition
+    is computed and only transitions that have a duration greater than `min_dur` seconds and less than `max_dur` seconds
+    are kept. The resulting DataFrame contains one row for each transition, with columns for the start date and end date,
+    the source and sink locations, the transition as a string ("source>sink"), the duration of the transition in seconds,
+    and the pathway as a string that lists all the locations visited between the source and sink locations.
+
+    Parameters:
+    -----------
+    df: pd.DataFrame
+        The input DataFrame of events, with one row per event and columns for the event date and the location name.
+    value: str, optional (default='location_name')
+        The name of the column that contains the location names in the input DataFrame.
+    source: str, optional (default='bed_out')
+        The name of the starting location for the pathways.
+    sink: str, optional (default='bed_in')
+        The name of the ending location for the pathways.
+    min_dur: float, optional (default=180)
+        The minimum duration of the transitions in seconds.
+    max_dur: float, optional (default=900)
+        The maximum duration of the transitions in seconds.
+
+    Returns:
+    --------
+    pd.DataFrame
+        A DataFrame with one row for each transition between `source` and `sink` locations, filtered by duration.
+        The DataFrame has the following columns:
+            - start_date: the date and time of the start of the transition.
+            - end_date: the date and time of the end of the transition.
+            - source: the name of the starting location.
+            - sink: the name of the ending location.
+            - transition: a string that represents the transition as "source>sink".
+            - dur: the duration of the transition in seconds.
+            - pathway: a string that lists all the locations visited between the source and sink locations.
+    """    
     transitions = mine_transition(df.query(f'{value} in ["{source}","{sink}"]'),
                                   value=value)
     if not transitions.empty:
@@ -531,7 +656,26 @@ def mine_pathway(df:pd.DataFrame,
     else:
         return pd.DataFrame()
     
-def mine_transition(df,value:str,datetime:str='start_date',window:int=1):
+def mine_transition(df,value:str,datetime:str='start_date',window:int=1) -> pd.DataFrame:
+    """
+    Extract transitions from a DataFrame by comparing values in a specific column.
+
+    Args:
+        df (pd.DataFrame): A pandas DataFrame containing the data to extract transitions from.
+        value (str): The column name in the DataFrame to compare values from.
+        datetime (str, optional): The column name in the DataFrame containing the date and time of each value. Defaults to 'start_date'.
+        window (int, optional): The size of the window used to compare values. Defaults to 1.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing the extracted transitions with the following columns:
+            start_date (datetime): The start date and time of each transition.
+            end_date (datetime): The end date and time of each transition.
+            source (str): The source value of each transition.
+            sink (str): The sink value of each transition.
+            transition (str): The concatenated source and sink values of each transition separated by '>'.
+            dur (float): The duration of each transition in seconds.
+
+    """
     # TODO: add categorical capabilites
     df = df.sort_values(datetime).drop_duplicates().reset_index()
     if not df.empty:
@@ -546,10 +690,22 @@ def mine_transition(df,value:str,datetime:str='start_date',window:int=1):
     else:
        return pd.DataFrame()    
 
-def between_time(df,factor,start_time,end_time):
-    index = pd.DatetimeIndex(df[factor])
-    return df.iloc[index.indexer_between_time(start_time,end_time)]
+def between_time(df: pd.DataFrame, factor: str, start_time: str, end_time: str) -> pd.DataFrame:
+    """
+    Extract rows from a pandas DataFrame that fall between a specified start and end time.
 
+    Args:
+        df: A pandas DataFrame containing the data to filter.
+        factor: The column name in the DataFrame containing the date/time values to use as the filter.
+        start_time: A string representing the start time in HH:MM format (24-hour clock).
+        end_time: A string representing the end time in HH:MM format (24-hour clock).
+
+    Returns:
+        A pandas DataFrame containing the rows that fall between the specified start and end times.
+
+    """
+    index = pd.DatetimeIndex(df[factor])
+    return df.iloc[index.indexer_between_time(start_time, end_time)]
 
 def epoch_to_local(dt: pd.Series, tz: str = 'Europe/London', unit: str = 's', shift: int = 0)-> pd.Series:
     """epoch_to_local converts epoch
@@ -622,8 +778,9 @@ def process_transition(df:pd.DataFrame, groupby:list, datetime:str, value:str, c
     """
     data = []
     df = df.sort_values(datetime)
+    groupby = groupby[0] if len(groupby)==1 else groupby
     for ix, subset in df.groupby(groupby):
-        if len(groupby) > 1:
+        if isinstance(groupby, list) and len(groupby) > 1:
             index = pd.MultiIndex.from_tuples(
                 [ix for _ in range(subset.shape[0])], names=groupby)
         else:
@@ -643,11 +800,11 @@ def process_transition(df:pd.DataFrame, groupby:list, datetime:str, value:str, c
             subset = pd.concat([start_date, end_date , source , sink, cov, transition, dur], axis=1)
             
         subset.index = index
-        subset.index.names = groupby
+        subset.index.names =  groupby if isinstance(groupby, list) else [groupby]
         data.append(subset.dropna())
     data = pd.concat(data)
-    dtypes = {'start_date': 'datetime64',
-              'end_date': 'datetime64',
+    dtypes = {'start_date': 'datetime64[ns]',
+              'end_date': 'datetime64[ns]',
               'source':'category',
               'sink':'category',
               'transition': 'category',
@@ -810,3 +967,16 @@ def shift_row_to_top(df, index_to_shift):
     """
     idx = [i for i in df.index if i!=index_to_shift]
     return df.loc[[index_to_shift]+idx]
+
+def delete_folder(pth: Path) -> None:
+    """Recursively delete a folder and its contents.
+
+    Args:
+        pth (Path): Path object representing the folder to delete.
+    """
+    for sub in pth.iterdir() :
+        if sub.is_dir() :
+            delete_folder(sub)
+        else :
+            sub.unlink()
+    pth.rmdir()    

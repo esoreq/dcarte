@@ -1,0 +1,99 @@
+encounter:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - end_date
+        - type
+        - reason
+    dtype: 
+        - category
+        - category
+        - datetime64[ns]
+        - str
+        - category
+        - object 
+    datasets:
+        - encounter    
+questionnaire:
+    columns: 
+        - response_id
+        - patient_id
+        - questionnaire
+        - question
+        - answer
+        - authored
+    dtype: 
+        - category
+        - category
+        - object
+        - object
+        - str
+        - datetime64[ns]
+    datasets:
+        - questionnaire_responses  
+procedure:
+    columns: 
+          - id
+          - start_date
+          - type
+          - patient_id
+          - home_id
+          - outcome
+          - follow_up
+          - notes
+    dtype: 
+        - category
+        - datetime64[ns]
+        - category
+        - category
+        - category
+        - object          
+        - object
+        - object        
+    datasets:
+        - procedure   
+observation_notes:
+    columns: 
+        - id
+        - date
+        - dataset
+        - subject_id
+        - patient_id
+        - home_id
+        - text
+    dtype: 
+        - category
+        - datetime64[ns]
+        - category
+        - category
+        - category
+        - category             
+        - object   
+    datasets:
+        - observation_notes  
+issue:
+    columns: 
+          - id
+          - authored_on
+          - start_date
+          - type
+          - patient_id
+          - home_id
+          - priority
+          - status
+          - title
+          - description
+    dtype: 
+        - category
+        - datetime64[ns]
+        - datetime64[ns]
+        - category
+        - category
+        - category          
+        - category
+        - category
+        - object      
+        - object         
+    datasets:
+        - issue         

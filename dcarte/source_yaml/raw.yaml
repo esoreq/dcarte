@@ -1,40 +1,4 @@
-encounter:
-    columns: 
-        - home_id
-        - patient_id
-        - start_date
-        - end_date
-        - type
-        - reason
-    dtype: 
-        - category
-        - category
-        - datetime64
-        - datetime64
-        - category
-        - object 
-    datasets:
-        - encounter    
-questionnaire:
-    columns: 
-        - home_id
-        - patient_id
-        - questionnaire
-        - question
-        - answer
-        - type
-        - authored
-    dtype: 
-        - category
-        - category
-        - object
-        - object
-        - object
-        - object 
-        - object
-    datasets:
-        - questionnaire_responses    
-raw_wearable_walking:
+wearable_walking:
     columns: 
         - home_id
         - patient_id
@@ -50,17 +14,17 @@ raw_wearable_walking:
     dtype: 
         - category
         - category
-        - datetime64
-        - datetime64
-        - int
-        - int
+        - datetime64[ns]
+        - datetime64[ns]
+        - float
+        - float
         - object
-        - int
+        - float
         - object
-        - int
+        - float
         - object    
     datasets:
-        - questionnaire_responses         
+        - raw_wearable_walking         
 vital_signs:
     columns: 
         - home_id
@@ -72,7 +36,7 @@ vital_signs:
     dtype: 
         - category
         - category
-        - datetime64
+        - datetime64[ns]
         - float
         - category
         - category  
@@ -99,14 +63,14 @@ blood_pressure:
     dtype: 
         - category
         - category
-        - datetime64
+        - datetime64[ns]
         - float
         - float
         - category
         - category  
     datasets: 
         - raw_blood_pressure
-environmental:
+ambient_temperature:
     columns: 
         - home_id
         - patient_id
@@ -119,7 +83,7 @@ environmental:
     dtype: 
         - category
         - category
-        - datetime64
+        - datetime64[ns]
         - category
         - category
         - float
@@ -127,6 +91,26 @@ environmental:
         - category  
     datasets:
         - raw_ambient_temperature
+light:
+    columns: 
+        - home_id
+        - patient_id
+        - start_date
+        - location_name
+        - location_id
+        - value
+        - unit
+        - device_type
+    dtype: 
+        - category
+        - category
+        - datetime64[ns]
+        - category
+        - category
+        - float
+        - category  
+        - category  
+    datasets:
         - raw_light
 activity:
     columns: 
@@ -138,7 +122,7 @@ activity:
     dtype: 
         - category
         - category
-        - datetime64
+        - datetime64[ns]
         - category
         - category
     datasets: 
@@ -154,7 +138,7 @@ door:
     dtype: 
         - category
         - category
-        - datetime64
+        - datetime64[ns]
         - category
         - category
         - category    
@@ -169,7 +153,7 @@ sleep_event:
     dtype: 
         - category
         - category
-        - datetime64
+        - datetime64[ns]
         - category
     datasets: 
         - raw_sleep_event
@@ -185,7 +169,7 @@ sleep_mat:
     dtype: 
         - category
         - category
-        - datetime64
+        - datetime64[ns]
         - category
         - float
         - float  
@@ -203,7 +187,7 @@ behavioural:
     dtype: 
         - category
         - category
-        - datetime64
+        - datetime64[ns]
         - category
         - object
     datasets: 
@@ -221,93 +205,15 @@ appliances:
     dtype: 
         - category
         - category
-        - datetime64
-        - datetime64
+        - datetime64[ns]
+        - datetime64[ns]
         - category
         - category  
         - category      
         - category              
     datasets:
         - raw_appliance_use
-encounter:
-    columns: 
-          - id
-          - start_date
-          - type
-          - patient_id
-          - home_id
-          - reason
-    dtype: 
-        - category
-        - datetime64
-        - category
-        - category
-        - category
-        - object
-    datasets:
-        - encounter
-procedure:
-    columns: 
-          - id
-          - start_date
-          - type
-          - patient_id
-          - home_id
-          - outcome
-          - follow_up
-          - notes
-    dtype: 
-        - category
-        - datetime64
-        - category
-        - category
-        - category
-        - object          
-        - object
-        - object        
-    datasets:
-        - procedure        
-issue:
-    columns: 
-          - id
-          - authored_on
-          - start_date
-          - type
-          - patient_id
-          - home_id
-          - priority
-          - status
-          - title
-          - description
-    dtype: 
-        - category
-        - datetime64
-        - datetime64
-        - category
-        - category
-        - category          
-        - category
-        - category
-        - object      
-        - object         
-    datasets:
-        - issue    
-observation_notes:
-    columns: 
-        - id
-        - date
-        - dataset
-        - subject_id
-        - patient_id
-        - home_id
-        - text
-    dtype: 
-        - category
-        - datetime64
-        - category
-        - category
-        - category
-        - category             
-        - object   
-    datasets:
-        - observation_notes                     
+
+     
+   
+                   

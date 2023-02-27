@@ -30,36 +30,51 @@ class MinderException(Exception):
 
 @dataclass
 class MinderDataset(object):
-    """MinderDataset class handles the downloading of datasets from the minder reserch platform
-
-    [extended_summary]
+    """
+    MinderDataset class handles the downloading of datasets from the minder research platform.
 
     Args:
-        dataset_name ([str]): [description]
-        datasets ([list]): [description]
-        columns ([list]): [description]
-        domain ([str]): [description]
-        dtypes ([list]): [description]
-        since ([list]): [description]
-        until ([list]): [description]
-        delay ([list]): [description]
-        auth ([list]): [description]
-        headers ([list]): [description]
-        server ([list]): [description]
-        token ([list]): [description]
-        compression ([list]): [description]
-        data_folder ([list]): [description]
-        data ([list]): [description]
-        request_id ([list]): [description]
-        reload ([list]): [description]
-        reapply ([list]): [description]
-        update ([list]): [description]
+        dataset_name (str): Name of the dataset.
+        datasets (list): List of dataset IDs to download.
+        columns (list): List of columns to include in the downloaded data.
+        domain (str): Domain ID of the dataset.
+        dtypes (list): List of data types for each column specified in `columns`.
+        since (str, optional): Start date for the dataset in ISO format (yyyy-mm-dd). Defaults to '2019-04-01'.
+        until (str, optional): End date for the dataset in ISO format (yyyy-mm-dd). Defaults to NOW.
+        log_level (str, optional): Level of logging. Defaults to 'DEBUG'.
+        delay (float, optional): Delay between requests in hours. Defaults to 1.
+        headers (dict, optional): HTTP headers to use for requests. Defaults to `cfg['headers']`.
+        server (str, optional): URL of the minder research platform. Defaults to `cfg['server']`.
+        home (Path, optional): Path to the directory for the downloaded data. Defaults to `cfg['home']`.
+        compression (str, optional): Compression format of the data. Defaults to `cfg['compression']`.
+        data_folder (str, optional): Name of the directory to store the downloaded data in `home`. Defaults to `cfg['data_folder']`.
+        data (pd.DataFrame, optional): Dataframe containing the downloaded data. Defaults to an empty dataframe.
+        request_id (str, optional): ID of the request for the dataset. Defaults to ''.
+        reload (bool, optional): If True, re-downloads the dataset. Defaults to False.
+        reapply (bool, optional): If True, reads the local file rather than downloading the dataset. Defaults to False.
+        update (bool, optional): If True, updates the dataset with new data. Defaults to False.
 
     Raises:
-        Exception: [description]
+        MinderException: Raised when there is an issue with the dataset request or response.
 
     Returns:
-        [type]: [description]
+        MinderDataset: Instance of the MinderDataset class.
+
+    Examples:
+        To download a dataset from the minder research platform:
+
+        >>> dataset = MinderDataset(
+        ...     dataset_name='vitals',
+        ...     datasets=['raw_body_weight', 'raw_heart_rate','raw_body_temperature],
+        ...     columns=['home_id', 'patient_id', 'start_date', 'value', 'unit','device_type'],
+        ...     domain='raw',
+        ...     dtypes=['category', 'category', 'datetime64[ns]', 'float', 'category', 'category'],
+        ...     since='2022-01-01',
+        ...     until='2022-02-01'
+        ... )
+
+        This will download the 'vitals' dataset with columns ['home_id', 'patient_id', 'start_date', 'value', 'unit','device_type'], into the 'raw' domain,
+        and containing data from January 1, 2022 to February 1, 2022.
     """
     dataset_name: str
     datasets: list
@@ -227,10 +242,13 @@ class MinderDataset(object):
 
     def save_dataset(self):
         dtypes = dict(zip(self.columns, self.dtypes))
-        write_table(self.data.astype(dtypes),
+        try:
+            write_table(self.data.astype(dtypes),
                     self.local_file,
                     self.compression,
                     self.metadata)
+        except:
+            print ('save failed')            
 
     def update_dataset(self):
         hdr = read_metadata(self.local_file)

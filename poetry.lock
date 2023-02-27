@@ -547,7 +547,7 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "pandas"
-version = "1.4.1"
+version = "1.5.3"
 description = "Powerful data structures for data analysis, time series, and statistics"
 category = "main"
 optional = false

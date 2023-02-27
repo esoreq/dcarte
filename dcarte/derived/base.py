@@ -41,8 +41,8 @@ def process_physiology(self):
     return df
 
 
-def process_habitat(self):
-    df = map_devices(self.datasets['environmental'],
+def process_light(self):
+    df = map_devices(self.datasets['light'],
                       self.datasets['device_types'])
     df = df[df.location_name != ''].reset_index(drop=True)
     dtypes = {'home_id': 'category', 'location_id': 'category',
@@ -51,6 +51,17 @@ def process_habitat(self):
     df = df.astype(dtypes)
     df = localize_time(df,['start_date'])
     return df
+
+def process_temperature(self):
+    df = map_devices(self.datasets['ambient_temperature'],
+                      self.datasets['device_types'])
+    df = df[df.location_name != ''].reset_index(drop=True)
+    dtypes = {'home_id': 'category', 'location_id': 'category',
+              'unit': 'category', 'location_name': 'category',
+              'source': 'category', 'value': 'float'}
+    df = df.astype(dtypes)
+    df = localize_time(df,['start_date'])
+    return df    
 
 
 def process_doors(self):
@@ -148,16 +159,19 @@ def mine_bed_occupancy(df):
         set_index('start_date').
         groupby('patient_id').
         resample('1T').
-        sum().
-        groupby('patient_id').
         location_name.
-        diff().
-        fillna(1).
-        to_frame().
-        query('location_name in [-1,1]').
-        location_name.
-        map({-1: 'Bed_out', 1: 'Bed_in'}).
-        to_frame())
+        sum())
+    df = (  df.
+            to_frame().
+            groupby('patient_id').
+            location_name.
+            diff().
+            fillna(1).
+            to_frame().
+            query('location_name in [-1,1]').
+            location_name.
+            map({-1: 'Bed_out', 1: 'Bed_in'}).
+            to_frame())
     return df.reset_index()
 
 def process_bed_occupancy(self):
@@ -195,8 +209,10 @@ def create_base_datasets():
     # until = '2022-02-20'
     parent_datasets = { 'Doors'     :[['door','raw']], 
                         'Entryway'  :[['doors','base']], 
-                        'Habitat'   :[['environmental','raw'],
+                        'Temperature'   :[['ambient_temperature','raw'],
                                       ['device_types','lookup']], 
+                        'Light'   :[['light','raw'],
+                                    ['device_types','lookup']],               
                         'Kitchen'   :[['appliances','raw'],
                                       ['doors','base'],
                                       ['activity','raw'],
@@ -214,7 +230,8 @@ def create_base_datasets():
     module_path = __file__
     for dataset in ['Doors', 
                     'Entryway', 
-                    'Habitat', 
+                    'Temperature', 
+                    'Light',
                     'Kitchen', 
                     'Sleep',
                     'Bed_occupancy',

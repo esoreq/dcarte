@@ -60,6 +60,7 @@ class LocalDataset(object):
     module: str = 'base'
     dependencies: list = field(default_factory=lambda: [])
     since: str = '2019-04-01'
+    last_update: str = None
     until: str = NOW
     delay: float = 1
     reapply: bool = False
@@ -69,6 +70,7 @@ class LocalDataset(object):
     compression: str = cfg['compression']
     data_folder: str = cfg['data_folder']
     data: pd.DataFrame = field(default_factory=lambda: pd.DataFrame())
+    local_data: pd.DataFrame = field(default_factory=lambda: pd.DataFrame())
 
     def __post_init__(self):
         """__post_init__ [summary]
@@ -121,15 +123,16 @@ class LocalDataset(object):
 
         [extended_summary]
         """
-        if not path_exists(self.local_file) or self.reload:
+        if not path_exists(self.local_file) or self.reload or self.reapply:
             set_path(self.local_file)
             self.process_dataset()
+            self.save_dataset()
         elif self.update:
             self.update_dataset()
-        elif self.reapply:
-            self.reapply_dataset()    
+            self.save_dataset()
         else:
             self.data = read_table(self.local_file)    
+              
 
     def reapply_dataset(self):
         """reapply_dataset [summary]
@@ -138,7 +141,6 @@ class LocalDataset(object):
         """
         for func in self.pipeline:
             self.data = getattr(self._module, func)(self)
-        self.save_dataset()
     
     def process_dataset(self):
         """process_dataset [summary]
@@ -147,12 +149,8 @@ class LocalDataset(object):
         """
         for func in self.pipeline:
             self.data = getattr(self._module, func)(self)
-        # domains = pd.DataFrame(cfg['domains'])
-        # dataset = np.array([self.domain,self.dataset_name])
-        # # dataset_exist = (domains == dataset).all(axis=1).any()
-        # # if not dataset_exist:
-        # #     self.register_dataset()
-        self.save_dataset()    
+
+  
 
     def update_dataset(self):
         """update_dataset [summary]
@@ -162,9 +160,18 @@ class LocalDataset(object):
         hdr = read_metadata(self.local_file)
         metadata = json.loads(hdr.metadata[b'minder'].decode())
         until = pd.to_datetime(metadata['until']).tz_localize(None) + self._delay
+        self.data = read_table(self.local_file)
+        if 'start_date' in self.data.columns:
+            self.local_data = self.data.copy()
+            for name,dataset in self.datasets.items():
+                if 'start_date' in dataset.columns:
+                    self.datasets[name] = dataset.query('start_date > @self.last_update').copy()
+    
         if until < pd.to_datetime(dt.datetime.now()):
             self.update_metadata()
             self.process_dataset()
+        if not self.local_data.empty:
+            self.data = pd.concat([self.local_data,self.data])
             
             
     def update_metadata(self):
