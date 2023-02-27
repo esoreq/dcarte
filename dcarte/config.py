@@ -53,6 +53,7 @@ def get_config(
         cfg = load_yaml(str(home) + config_file)
         # Check if cfg file reflects all the datasets in home
         check_data_files()
+        reset_config()
         files = list(Path(f"{home}{sep}dcarte{sep}config{sep}").glob("*.yaml"))
         domains = pd.DataFrame(cfg["domains"]).domain.unique()
         if domains.shape[0] != len(files):
@@ -361,6 +362,27 @@ def baseline_config(home: Path, root: Path, files: List[Path]) -> Dict[str, Any]
         "server": "https://research.minder.care/api/export",
     }
     return cfg
+
+
+def reset_config():
+    root = Path("__file__").parent.absolute()
+    home = Path("~").expanduser()
+    config_file = f"{home}{sep}dcarte{sep}config.yaml"
+    dcarte_home = Path(dcarte.__file__).parent.absolute()
+    cfg = load_yaml(config_file)
+    source_yaml = get_source_yaml(dcarte_home)
+    compare_source_yaml(home, source_yaml)
+    files = list(Path(f"{home}{sep}dcarte{sep}config{sep}").glob("*.yaml"))
+    domains = [ ]
+    for file in files: 
+        tmp = load_yaml(file)
+        domain = file.stem
+        datasets = tmp.keys()
+        domains.append(pd.Series(datasets,name='dataset').to_frame().assign(domain = domain))
+    domains = pd.concat(domains)    
+    cfg['domains'] = domains.to_dict("records")
+    write_yaml(config_file,cfg)  
+    
 
 
 def check_data_files():

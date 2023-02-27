@@ -73,7 +73,7 @@ def segment_freq(v: pd.Series,
 
 
 
-def dst_correction(df: pd.DataFrame, dst_correct: bool = True, years: list[int] = [2018, 2019, 2020, 2021, 2022], shift_time: int = 12) -> pd.DataFrame:
+def dst_correction(df: pd.DataFrame, dst_correct: bool = True, years: List[int] = [2018, 2019, 2020, 2021, 2022], shift_time: int = 12) -> pd.DataFrame:
     """
     Daylight saving correction.
 

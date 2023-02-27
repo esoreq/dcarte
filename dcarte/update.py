@@ -1,6 +1,5 @@
 import pandas as pd 
 import os 
-from typing import NoneType
 
 import datetime as dt
 from .config import get_config
@@ -11,7 +10,7 @@ sep = os.sep
 cfg = get_config()
 NOW = date2iso(str(dt.datetime.now()))
 
-def update_raw() -> NoneType:
+def update_raw() -> None:
     """Updates data by loading parquet files from specified directories and running `load`.
 
     The function iterates over all files in the directories 'raw', 'lookup', and 'care' specified in the config file.
@@ -36,7 +35,7 @@ def update_raw() -> NoneType:
     
         
         
-def update_domain(domain:str ="base")-> NoneType:
+def update_domain(domain:str ="base")-> None:
     """
     Updates datasets in the specified domain.
 
