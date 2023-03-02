@@ -1,6 +1,7 @@
 import pandas as pd 
 import os 
-
+from typing import List
+import numpy as np
 import datetime as dt
 from .config import get_config
 from .load import load
@@ -13,7 +14,7 @@ NOW = date2iso(str(dt.datetime.now()))
 
 
 
-def download_domain(domain:str) -> None:
+def download_domain(domain:str) -> List:
     """
 
     Args:
@@ -25,7 +26,7 @@ def download_domain(domain:str) -> None:
     print("THIS FUNCTION MAY TAKE LONG")
     output = [] 
     domains_ = domains()
-    datasets = domains[[domain.upper()]].replace('',np.nan).dropna()
+    datasets = domains_[[domain.upper()]].replace('',np.nan).dropna()
     for dataset in datasets:
         output.append(load(dataset,domain))
     
