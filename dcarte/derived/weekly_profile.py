@@ -337,6 +337,7 @@ def create_weekly_profile():
                         pipeline = [f'process_{dataset.lower()}'],
                         domain = domain,
                         module = module,
+                        reapply = True,
                         module_path = module_path,
                         dependencies = parent_datasets[dataset])
     
