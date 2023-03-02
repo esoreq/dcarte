@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Optional,List
 import datetime as dt
 import json
 import os
@@ -85,6 +86,7 @@ class MinderDataset(object):
     until: str = NOW
     log_level: str = 'DEBUG'
     delay: float = 1
+    organizations: Optional[List[str]] = None
     headers: dict = field(default_factory=lambda: cfg['headers'])
     server: str = cfg['server']
     home: Path = cfg['home']
@@ -105,6 +107,8 @@ class MinderDataset(object):
                              'until': self.until,
                              'datasets': {ds: {"columns": self.columns}
                                           for ds in self.datasets}}
+        if self.organizations is not None:
+            self.data_request.update({'organizations':self.organizations})
         self.local_file = (f'{self.data_folder}{sep}'
                            f'{self.domain}{sep}'
                            f'{self.dataset_name}.parquet')
@@ -164,6 +168,7 @@ class MinderDataset(object):
             sleep(sleep_time)
             request_output = self.get_output()
         self.csv_url = request_output
+        print('')
 
     def get_output(self):
         try:
@@ -186,6 +191,7 @@ class MinderDataset(object):
         except BaseException as err:
             logging.debug(f'Unexpected {self.request_id} {err=},{type(err)=}')
             raise
+        
         return output
     
     def persistent_download(self,url,idx):

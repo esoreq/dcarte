@@ -157,21 +157,30 @@ class LocalDataset(object):
 
         [extended_summary]
         """
+        updated_data = False
         hdr = read_metadata(self.local_file)
         metadata = json.loads(hdr.metadata[b'minder'].decode())
         until = pd.to_datetime(metadata['until']).tz_localize(None) + self._delay
         self.data = read_table(self.local_file)
         if 'start_date' in self.data.columns:
             self.local_data = self.data.copy()
+            self.last_update = self.local_data.start_date.max()
             for name,dataset in self.datasets.items():
                 if 'start_date' in dataset.columns:
-                    self.datasets[name] = dataset.query('start_date > @self.last_update').copy()
+                    tmp = dataset.query('start_date > @self.last_update').copy()
+                    if not tmp.empty:
+                        self.datasets[name] = tmp
+                        updated_data = True
+
     
-        if until < pd.to_datetime(dt.datetime.now()):
+        if until < pd.to_datetime(dt.datetime.now()) and updated_data:
             self.update_metadata()
             self.process_dataset()
-        if not self.local_data.empty:
-            self.data = pd.concat([self.local_data,self.data])
+        if not self.local_data.empty and not self.data.empty:
+            self.data = pd.concat([self.local_data, self.data]).drop_duplicates()
+        else:
+            self.data =  self.local_data
+    
             
             
     def update_metadata(self):
