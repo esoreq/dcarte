@@ -26,9 +26,9 @@ def download_domain(domain:str) -> List:
     print("THIS FUNCTION MAY TAKE LONG")
     output = [] 
     domains_ = domains()
-    datasets = domains_[[domain.upper()]].replace('',np.nan).dropna()
+    datasets = domains_[[domain.upper()]].replace('',np.nan).dropna().values
     for dataset in datasets:
-        output.append(load(dataset,domain))
+        output.append(load(dataset[0],domain=domain))
     
     return output
     
