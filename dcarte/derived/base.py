@@ -201,6 +201,20 @@ def process_sleep(self):
     sleep_mat = localize_time(sleep_mat,['start_date'])
     return sleep_mat
 
+def process_habitat(self):
+    df01 = map_devices(self.datasets['light'],
+                      self.datasets['device_types'])
+    df02 = map_devices(self.datasets['temperature'],
+                      self.datasets['device_types'])
+    
+    df01 = df01[df01.location_name != ''].reset_index(drop=True)
+    df02 = df02[df02.location_name != ''].reset_index(drop=True)
+    df = pd.concat([df01,df02])
+    dtypes = {'home_id': 'category', 'location_id': 'category',
+              'unit': 'category', 'location_name': 'category',
+              'source': 'category', 'value': 'float'}
+    df = df.astype(dtypes)
+    return df
 
 def create_base_datasets():
     domain = 'base'
@@ -209,10 +223,10 @@ def create_base_datasets():
     # until = '2022-02-20'
     parent_datasets = { 'Doors'     :[['door','raw']], 
                         'Entryway'  :[['doors','base']], 
-                        'Temperature'   :[['ambient_temperature','raw'],
-                                      ['device_types','lookup']], 
+                    'Temperature'   :[['ambient_temperature','raw'],
+                                      ['device_types','lookup']],              
                         'Light'   :[['light','raw'],
-                                    ['device_types','lookup']],               
+                                    ['device_types','lookup']],                                                  
                         'Kitchen'   :[['appliances','raw'],
                                       ['doors','base'],
                                       ['activity','raw'],

@@ -121,7 +121,7 @@ def process_sleep_dailies(obj):
     bed_occupancy = obj.datasets['bed_occupancy']
     bo_transition = bed_occupancy.groupby('patient_id').apply(mine_transition, value = 'location_name')
     bed_in = bo_transition.query('transition == "Bed_in>Bed_out"')
-    bed_in = bed_in.groupby('patient_id').apply(segment_periods)
+    bed_in = bed_in.groupby('patient_id', group_keys=False).apply(segment_periods)
     habits = mine_bed_habits(bed_in)
     mapper = habits.reset_index().set_index(['patient_id','start_date']).period_segments.to_dict()
     sleep = sleep.assign( period_segments = sleep.set_index(['patient_id','start_date']).index.map(mapper))
@@ -233,9 +233,9 @@ def process_physiology_dailies(obj):
                         droplevel(0, axis=1))
     daily_physiology = daily_physiology[factors]
     daily_physiology.columns = ['Heart_rate','Weight','BMI','Oxygen_Saturation','Temperature','Systolic_BP','Diastolic_BP', 'Body_Fat']
-    ds = (ds.reset_index()[['patient_id','start_date','respiratory_rate','heart_rate']]
+    ds = (ds.reset_index()[['patient_id','start_time','respiratory_rate','heart_rate']]
               .groupby(['patient_id']).
-               resample('1D', on='start_date', offset='12h').
+               resample('1D', on='start_time', offset='12h').
                agg(RR_rest = ('respiratory_rate' , 'mean'),
                    HR_rest = ('heart_rate' , 'mean')))
     daily_physiology = daily_physiology.join(ds)
@@ -260,8 +260,7 @@ def process_physiology_weeklies(obj):
     return physiology_weeklies
 
 def process_light(obj):
-    Habitat = obj.datasets['Habitat']
-    Light = Habitat.query('source == "raw_light"')
+    Light = obj.datasets['light']
     mapping = {'bathroom1': 'Bathroom', 
         'WC1': 'Bathroom',
         'kitchen': 'Kitchen',
@@ -278,18 +277,17 @@ def process_light(obj):
         'front door': 'Front door',
         'back door': 'Back door'}  
 
-    Light.location_name = Light.location_name.astype(str).replace(mapping)
+    Light.loc[:,'location_name'] = Light.location_name.astype(str).map(mapping)
     Light = Light.query('["garage", "secondary"] not in location_name')
     Light = (Light.groupby(['patient_id', 'location_name']).
                 resample('15T', on='start_date').
-                mean().fillna(method='ffill')).reset_index()
+                mean(numeric_only=True).fillna(method='ffill')).reset_index()
     Light.insert(3, 'date', Light.start_date.dt.date)
     Light.insert(4, 'time', Light.start_date.apply(time_to_angles))
     return Light
 
 def process_temperature(obj):
-    Habitat = obj.datasets['Habitat']
-    temperature = Habitat.query('source != "raw_light"')
+    temperature = obj.datasets['temperature']
     
     
     mapping = {'bathroom1': 'Bathroom', 
@@ -308,11 +306,11 @@ def process_temperature(obj):
                 'front door': 'Front door',
                 'back door': 'Back door'}  
 
-    temperature.location_name = temperature.location_name.astype(str).replace(mapping)
+    temperature.loc[:,'location_name'] = temperature.location_name.astype(str).map(mapping)
     temperature = temperature.query('["garage", "secondary"] not in location_name')
     temperature = (temperature.groupby(['patient_id', 'location_name']).
                 resample('15T', on='start_date').
-                mean().fillna(method='ffill')).reset_index()
+                mean(numeric_only=True).fillna(method='ffill')).reset_index()
     temperature.insert(3, 'date', temperature.start_date.dt.date)
     temperature.insert(4, 'time', temperature.start_date.apply(time_to_angles))
     return temperature
@@ -327,8 +325,8 @@ def create_weekly_profile():
                         'activity_weeklies':[['activity_dailies','profile']], 
                         'sleep_dailies':[['sleep','base'],['bed_occupancy','base']], 
                         'physiology_dailies':[['physiology','base'],['sleep_dailies','profile']], 
-                        'light':[['Habitat','base']], 
-                        'temperature':[['Habitat','base']],
+                        'light':[['light','base']], 
+                        'temperature':[['temperature','base']],
                         'sleep_model':[['sleep_dailies','profile']]}
     for dataset in parent_datasets.keys():
         p_datasets = {d[0]:dcarte.load(*d) for d in parent_datasets[dataset]} 
