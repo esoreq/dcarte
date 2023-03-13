@@ -70,7 +70,7 @@ class LocalDataset(object):
     compression: str = cfg['compression']
     data_folder: str = cfg['data_folder']
     data: pd.DataFrame = field(default_factory=lambda: pd.DataFrame())
-    local_data: pd.DataFrame = field(default_factory=lambda: pd.DataFrame())
+    local_dataset: pd.DataFrame = field(default_factory=lambda: pd.DataFrame())
 
     def __post_init__(self):
         """__post_init__ [summary]
@@ -176,10 +176,10 @@ class LocalDataset(object):
         if until < pd.to_datetime(dt.datetime.now()) and updated_data:
             self.update_metadata()
             self.process_dataset()
-        if not self.local_data.empty and not self.data.empty:
-            self.data = pd.concat([self.local_data, self.data]).drop_duplicates()
-        else:
-            self.data =  self.local_data
+        if not self.local_dataset.empty and not self.data.empty:
+            self.data = pd.concat([self.local_dataset, self.data]).drop_duplicates()
+        elif self.data.empty and not self.local_dataset.empty:
+            self.data =  self.local_dataset
     
             
             

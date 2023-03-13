@@ -92,6 +92,7 @@ def load(dataset:str,domain:str,**kwargs):
                  'datasets':parent_datasets,
                  'pipeline':info[dataset]['pipeline'],
                  'last_update':last_update,
+                 'local_dataset':local_dataset,
                  'module':info[dataset]['module'],
                  'dependencies':info[dataset]['domains'],
                  'domain':domain} 

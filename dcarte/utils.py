@@ -4,6 +4,7 @@ from functools import wraps
 import collections
 import typing
 from typing import List,Union,Dict,Any
+from tqdm import tqdm
 
 from copy import deepcopy
 import time
@@ -565,8 +566,8 @@ def localize_time(df:pd.DataFrame, factors:list, timezones=None):
         try:
             for factor in factors:
                 dt = pd.to_datetime(_df[factor],utc=True).dt.tz_localize(None)
-                offset = pd.Series([t.utcoffset() for t in dt.dt.tz_localize(
-                    tz, ambiguous=True, nonexistent='shift_forward')], index=dt.index)
+                offset = pd.Series(tqdm([t.utcoffset() for t in dt.dt.tz_localize(
+                    tz, ambiguous=True, nonexistent='shift_forward')], desc="Processing offset"), index=dt.index)
                 _df[factor] = dt + offset
             data.append(_df)
         except:

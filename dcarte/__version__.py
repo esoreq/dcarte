@@ -2,4 +2,4 @@
 __author__ = "Eyal Soreq"
 __copyright__ = "2021 Eyal Soreq"
 __title__ = "dcarte"
-__version__ = "0.4.06"
+__version__ = "0.4.07"
