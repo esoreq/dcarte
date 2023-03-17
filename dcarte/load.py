@@ -41,11 +41,11 @@ def load(dataset:str,domain:str,**kwargs):
     data_folder = cfg['data_folder']
     datasets = pd.DataFrame(cfg['domains'])
     last_update = None
-        
+    local_dataset = pd.DataFrame()    
     if not (datasets == np.array([dataset,domain])).all(axis=1).any():
         raise Exception(f"Sorry, {dataset} is not a registered dataset in {domain} domain in dcarte")
     
-
+    
         
     local_file = f'{data_folder}{sep}{domain}{sep}{dataset}.parquet'
     if path_exists(local_file):
