@@ -13,5 +13,6 @@ import dcarte
 # Light = dcarte.load('Temperature', 'profile', update=True)
 
 # Sleep_Event = dcarte.load('Motion','base',update=True)
-Physiology_Dailies = dcarte.load('Physiology_Dailies','profile',update=True)
-print(Physiology_Dailies.shape)
+sleep_dailies = dcarte.load('sleep_dailies','profile',update=False)
+pid = '2GN1PHeHwRzNYQ7q4Nvg7g'
+sleep_dailies.query('patient_id == @pid and ("2021-09-22" < start_date < "2021-09-26")')
