@@ -116,7 +116,7 @@ def process_kitchen(self):
     kitchen = pd.concat([doors, activity, appliances.dropna()])   
     kitchen = kitchen[kitchen.patient_id != ''].sort_values(['patient_id', 'start_date']) 
     kitchen = process_transition(kitchen, ['patient_id'], 'start_date', 'activity', ['device_type'])
-    return kitchen.reset_index(drop=True)
+    return kitchen.reset_index()
 
 
 def process_motion(self):
@@ -261,7 +261,6 @@ def create_base_datasets():
                      domain = domain,
                      module = module,
                      module_path = module_path,
-                     reapply = True,
                      dependencies = parent_datasets[dataset])
     
 if __name__ == "__main__":

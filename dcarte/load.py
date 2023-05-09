@@ -50,8 +50,9 @@ def load(dataset:str,domain:str,**kwargs):
     local_file = f'{data_folder}{sep}{domain}{sep}{dataset}.parquet'
     if path_exists(local_file):
         local_dataset = read_table(local_file)
-        if 'start_date' in local_dataset.columns:
-            last_update = local_dataset.start_date.max()
+        if any(col in local_dataset.columns for col in ['start_date', 'start_time']):
+            col = 'start_date' if 'start_date' in local_dataset.columns else 'start_time'
+            last_update = local_dataset[col].max()
     
 
     if (dflt['reapply'] or dflt['reload']) and path_exists(local_file):

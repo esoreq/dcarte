@@ -142,6 +142,7 @@ def process_sleep_dailies(obj):
     sleep_metrics.nap_ibp = sleep_metrics.nap_ibp.fillna(0)
     sleep_metrics = sleep_metrics.assign(time_to_bed = (sleep_metrics.start_time.dt.time.apply(time_to_angles)+180)%360,
                                          wake_up_time = sleep_metrics.end_time.dt.time.apply(time_to_angles))
+    sleep_metrics = sleep_metrics.reset_index().rename(columns={'datetime':'start_date'})
     return sleep_metrics
 
 
@@ -204,7 +205,7 @@ def process_sleep_model(obj):
         rem_ratio = (df.REM)/df.ibp,
         light_ratio = (df.LIGHT)/df.ibp,
         exit_ratio = (df.nb_awakenings/(df.ibp+df.obp)),
-        night = df.index.get_level_values(1).date   
+        night = df.start_date
     )
 
     return df

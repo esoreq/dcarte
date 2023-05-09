@@ -37,7 +37,8 @@ def segment_freq(v: pd.Series,
     v : pandas.Series
         A series of values to segment.
     window_length : int, optional
-        Length of the window used by the Savitzky-Golay filter. Must be odd and positive. Default is 59.
+        Length of the window used by the 
+         filter. Must be odd and positive. Default is 59.
     polyorder : int, optional
         Order of the polynomial used by the Savitzky-Golay filter. Default is 1.
     r : int, optional
