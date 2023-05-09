@@ -135,10 +135,12 @@ def process_sleep_dailies(obj):
     sleep_periods = sleep_vitals_.join(habits_).join(sleep_states_).round(2)
     sleep_periods = sleep_periods.dropna(subset=['time_in_bed','DEEP','hr_max'])
     sleep_metrics = resample_sleep_metrics(sleep_periods)
-
     diurnal_habits = resample_sleep_metrics(sleep_periods,'Diurnal')
-    diurnal_habits = diurnal_habits.assign(nap_ibp = diurnal_habits.time_in_bed)
-    sleep_metrics = pd.merge(sleep_metrics,diurnal_habits.nap_ibp,how='left',left_index=True, right_index=True)
+    if not diurnal_habits.empty:
+        diurnal_habits = diurnal_habits.assign(nap_ibp = diurnal_habits.time_in_bed)
+        sleep_metrics = pd.merge(sleep_metrics,diurnal_habits.nap_ibp,how='left',left_index=True, right_index=True)
+    else:
+        sleep_metrics = sleep_metrics.assign(nap_ibp = 0)   
     sleep_metrics.nap_ibp = sleep_metrics.nap_ibp.fillna(0)
     sleep_metrics = sleep_metrics.assign(time_to_bed = (sleep_metrics.start_time.dt.time.apply(time_to_angles)+180)%360,
                                          wake_up_time = sleep_metrics.end_time.dt.time.apply(time_to_angles))
@@ -148,32 +150,35 @@ def process_sleep_dailies(obj):
 
 def resample_sleep_metrics(sleep_periods,period_type:str="Nocturnal"):
     habits = sleep_periods.query('period_type == @period_type').drop(columns=['period_type'])
-    habits = (habits.
-              reset_index().
-              assign(datetime = habits.reset_index().start_date).
-              set_index('datetime').
-              groupby('patient_id').
-              resample('1D',offset='12h').agg(
-                start_time = ('start_date', 'min'),
-                end_time = ('end_date', 'max'),
-                nb_awakenings = ('awake_events' ,lambda x: x if x.shape[0]==1 else x.sum()+x.shape[0]-1),
-                time_in_bed = ('time_in_bed' ,'sum'),
-                period_obs = ('period_obs' ,'sum'),
-                minutes_snoring = ('minutes_snoring' ,'sum'),
-                heart_rate = ('heart_rate', 'mean'),
-                hr_min = ('hr_min' ,'min'),
-                hr_max = ('hr_max' ,'max'),
-                respiratory_rate = ('respiratory_rate' ,'mean'),
-                rr_min = ('rr_min' ,'min'),
-                rr_max = ('rr_max' ,'max'),
-                AWAKE = ('AWAKE' ,'sum'),
-                DEEP = ('DEEP' ,'sum'),
-                REM = ('REM' ,'sum'),
-                LIGHT = ('LIGHT' ,'sum')
-              ).dropna())
-    habits = habits.assign(bed_time_period=(habits.end_time - habits.start_time)/np.timedelta64(1, 'h'))
-    habits = habits.assign(time_out_of_bed=(habits.bed_time_period - habits.time_in_bed))
-    return habits
+    if habits.empty:
+        return habits
+    else: 
+        habits = (habits.
+                reset_index().
+                assign(datetime = habits.reset_index().start_date).
+                set_index('datetime').
+                groupby('patient_id').
+                resample('1D',offset='12h').agg(
+                    start_time = ('start_date', 'min'),
+                    end_time = ('end_date', 'max'),
+                    nb_awakenings = ('awake_events' ,lambda x: x if x.shape[0]==1 else x.sum()+x.shape[0]-1),
+                    time_in_bed = ('time_in_bed' ,'sum'),
+                    period_obs = ('period_obs' ,'sum'),
+                    minutes_snoring = ('minutes_snoring' ,'sum'),
+                    heart_rate = ('heart_rate', 'mean'),
+                    hr_min = ('hr_min' ,'min'),
+                    hr_max = ('hr_max' ,'max'),
+                    respiratory_rate = ('respiratory_rate' ,'mean'),
+                    rr_min = ('rr_min' ,'min'),
+                    rr_max = ('rr_max' ,'max'),
+                    AWAKE = ('AWAKE' ,'sum'),
+                    DEEP = ('DEEP' ,'sum'),
+                    REM = ('REM' ,'sum'),
+                    LIGHT = ('LIGHT' ,'sum')
+                ).dropna())
+        habits = habits.assign(bed_time_period=(habits.end_time - habits.start_time)/np.timedelta64(1, 'h'))
+        habits = habits.assign(time_out_of_bed=(habits.bed_time_period - habits.time_in_bed))
+        return habits
 
 
 def get_awake_events(x):
@@ -234,9 +239,9 @@ def process_physiology_dailies(obj):
                         droplevel(0, axis=1))
     daily_physiology = daily_physiology[factors]
     daily_physiology.columns = ['Heart_rate','Weight','BMI','Oxygen_Saturation','Temperature','Systolic_BP','Diastolic_BP', 'Body_Fat']
-    ds = (ds.reset_index()[['patient_id','start_time','respiratory_rate','heart_rate']]
+    ds = (ds.reset_index()[['patient_id','start_date','respiratory_rate','heart_rate']]
               .groupby(['patient_id']).
-               resample('1D', on='start_time', offset='12h').
+               resample('1D', on='start_date', offset='12h').
                agg(RR_rest = ('respiratory_rate' , 'mean'),
                    HR_rest = ('heart_rate' , 'mean')))
     daily_physiology = daily_physiology.join(ds)

@@ -687,7 +687,9 @@ def mine_transition(df,value:str,datetime:str='start_date',window:int=1) -> pd.D
        end_date = df[datetime].shift(-window).rename('end_date')
        source = df[value].rename('source')
        sink = df[value].shift(-window).rename('sink')
-       transition = pd.Series(rolling_window(df[value].values,window+1)).rename('transition')
+       transition_ = rolling_window(df[value].values,window+1)
+       dtype = 'object' 
+       transition = pd.Series(transition_,dtype=dtype).rename('transition')
        return pd.concat([start_date, end_date, source,sink,transition.reindex(sink.index), dur], axis=1)
     else:
        return pd.DataFrame()    
