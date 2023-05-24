@@ -14,8 +14,8 @@ wearable_walking:
     dtype: 
         - category
         - category
-        - datetime64[ns]
-        - datetime64[ns]
+        - datetime64[ns, UTC]
+        - datetime64[ns, UTC]
         - float
         - float
         - object
@@ -36,7 +36,7 @@ vital_signs:
     dtype: 
         - category
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - float
         - category
         - category  
@@ -63,7 +63,7 @@ blood_pressure:
     dtype: 
         - category
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - float
         - float
         - category
@@ -83,7 +83,7 @@ ambient_temperature:
     dtype: 
         - category
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - category
         - category
         - float
@@ -104,7 +104,7 @@ light:
     dtype: 
         - category
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - category
         - category
         - float
@@ -122,7 +122,7 @@ activity:
     dtype: 
         - category
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - category
         - category
     datasets: 
@@ -138,7 +138,7 @@ door:
     dtype: 
         - category
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - category
         - category
         - category    
@@ -153,7 +153,7 @@ sleep_event:
     dtype: 
         - category
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - category
     datasets: 
         - raw_sleep_event
@@ -169,7 +169,7 @@ sleep_mat:
     dtype: 
         - category
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - category
         - float
         - float  
@@ -187,7 +187,7 @@ behavioural:
     dtype: 
         - category
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - category
         - object
     datasets: 
@@ -205,8 +205,8 @@ appliances:
     dtype: 
         - category
         - category
-        - datetime64[ns]
-        - datetime64[ns]
+        - datetime64[ns, UTC]
+        - datetime64[ns, UTC]
         - category
         - category  
         - category      

@@ -9,7 +9,7 @@ encounter:
     dtype: 
         - category
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - str
         - category
         - object 
@@ -29,7 +29,7 @@ questionnaire:
         - object
         - object
         - str
-        - datetime64[ns]
+        - datetime64[ns, UTC]
     datasets:
         - questionnaire_responses  
 procedure:
@@ -44,7 +44,7 @@ procedure:
           - notes
     dtype: 
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - category
         - category
         - category
@@ -64,7 +64,7 @@ observation_notes:
         - text
     dtype: 
         - category
-        - datetime64[ns]
+        - datetime64[ns, UTC]
         - category
         - category
         - category
@@ -86,8 +86,8 @@ issue:
           - description
     dtype: 
         - category
-        - datetime64[ns]
-        - datetime64[ns]
+        - datetime64[ns, UTC]
+        - datetime64[ns, UTC]
         - category
         - category
         - category          

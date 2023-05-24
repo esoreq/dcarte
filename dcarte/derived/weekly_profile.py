@@ -153,29 +153,22 @@ def resample_sleep_metrics(sleep_periods,period_type:str="Nocturnal"):
     if habits.empty:
         return habits
     else: 
-        habits = (habits.
+        sampler = (habits.
                 reset_index().
                 assign(datetime = habits.reset_index().start_date).
                 set_index('datetime').
                 groupby('patient_id').
-                resample('1D',offset='12h').agg(
-                    start_time = ('start_date', 'min'),
-                    end_time = ('end_date', 'max'),
-                    nb_awakenings = ('awake_events' ,lambda x: x if x.shape[0]==1 else x.sum()+x.shape[0]-1),
-                    time_in_bed = ('time_in_bed' ,'sum'),
-                    period_obs = ('period_obs' ,'sum'),
-                    minutes_snoring = ('minutes_snoring' ,'sum'),
-                    heart_rate = ('heart_rate', 'mean'),
-                    hr_min = ('hr_min' ,'min'),
-                    hr_max = ('hr_max' ,'max'),
-                    respiratory_rate = ('respiratory_rate' ,'mean'),
-                    rr_min = ('rr_min' ,'min'),
-                    rr_max = ('rr_max' ,'max'),
-                    AWAKE = ('AWAKE' ,'sum'),
-                    DEEP = ('DEEP' ,'sum'),
-                    REM = ('REM' ,'sum'),
-                    LIGHT = ('LIGHT' ,'sum')
-                ).dropna())
+                resample('1D',offset='12h'))
+        sum_features = ['period_obs','time_in_bed','minutes_snoring' ,'AWAKE','DEEP','REM','LIGHT']
+        mean_features = ['heart_rate','respiratory_rate']
+        min_features = ['hr_min','rr_min','start_date']
+        max_features = ['hr_max','rr_max','end_date']
+        nb_awakenings = np.clip(sampler[['awake_events']].count() + sampler[['awake_events']].sum() - 1,0,np.inf).rename(columns={'awake_events':'nb_awakenings'})
+        habits = pd.concat([sampler[sum_features].sum(),
+                            sampler[mean_features].mean(),
+                            sampler[min_features].min().rename(columns={'start_date':'start_time'}),
+                            sampler[max_features].max().rename(columns={'end_date':'end_time'}),
+                            nb_awakenings],axis=1).dropna()
         habits = habits.assign(bed_time_period=(habits.end_time - habits.start_time)/np.timedelta64(1, 'h'))
         habits = habits.assign(time_out_of_bed=(habits.bed_time_period - habits.time_in_bed))
         return habits
@@ -226,7 +219,7 @@ def process_physiology_dailies(obj):
         pd.DataFrame: a pandas dataframe with patient_id 
     """
     dp = obj.datasets['physiology']
-    ds = obj.datasets['sleep_dailies']
+    ds = obj.datasets['sleep_dailies'][['patient_id','start_date','respiratory_rate','heart_rate']].set_index('start_date')
     factors = ['raw_heart_rate','raw_body_weight','raw_body_mass_index','raw_oxygen_saturation',
                'raw_body_temperature','systolic_bp','diastolic_bp','raw_total_body_fat']
     daily_physiology = dp.query("source in @factors")
@@ -239,13 +232,9 @@ def process_physiology_dailies(obj):
                         droplevel(0, axis=1))
     daily_physiology = daily_physiology[factors]
     daily_physiology.columns = ['Heart_rate','Weight','BMI','Oxygen_Saturation','Temperature','Systolic_BP','Diastolic_BP', 'Body_Fat']
-    ds = (ds.reset_index()[['patient_id','start_date','respiratory_rate','heart_rate']]
-              .groupby(['patient_id']).
-               resample('1D', on='start_date', offset='12h').
-               agg(RR_rest = ('respiratory_rate' , 'mean'),
-                   HR_rest = ('heart_rate' , 'mean')))
+    feature_mapping = {'respiratory_rate':'RR_rest','heart_rate':'HR_rest'}
+    ds = ds.groupby(['patient_id']).resample('1D',offset='12h').mean().rename(columns=feature_mapping)
     daily_physiology = daily_physiology.join(ds)
-    
     return daily_physiology
 
 def process_physiology_weeklies(obj):
