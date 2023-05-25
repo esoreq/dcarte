@@ -235,7 +235,12 @@ def timer(desc : str = None):
         return wrapped
     return wrapper
 
-
+def get_timezone(timestamp):
+    if timestamp.tzinfo is None:
+        return False
+    else:
+        return timestamp.tzinfo
+    
 class BearerAuth(requests.auth.AuthBase):
     """BearerAuth manages the coupling of a token to requests framework
 

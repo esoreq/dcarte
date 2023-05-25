@@ -5,6 +5,7 @@ import os
 import sys
 import filecmp
 import shutil
+import pytz
 from pathlib import Path
 from .config import get_config, update_config
 import pandas as pd
@@ -167,7 +168,9 @@ class LocalDataset(object):
             self.last_update = self.local_data.start_date.max()
             for name,dataset in self.datasets.items():
                 if 'start_date' in dataset.columns:
-                    tmp = dataset.query('start_date > @self.last_update').copy()
+                    tzinfo = dataset.start_date.iat[0].tzinfo
+                    last_update_ = self.last_update.tz_localize(tzinfo)
+                    tmp = dataset.query('start_date > @last_update_').copy()
                     if not tmp.empty:
                         self.datasets[name] = tmp
                         updated_data = True
