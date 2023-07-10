@@ -16,6 +16,7 @@ from .utils import (write_table,
                    read_metadata,
                    date2iso,
                    BearerAuth,
+                   align_dtypes,
                    path_exists,
                    set_path)
 
@@ -240,7 +241,7 @@ class MinderDataset(object):
     def append_dataset(self):
         # TODO: fix the append to file function
         dtypes = dict(zip(self.columns, self.dtypes))
-        _data = read_table(self.local_file).replace({'false':0.0,'true':1.0}).astype(dtypes)
+        _data = align_dtypes(read_table(self.local_file).replace({'false':0.0,'true':1.0}),self.data)
         write_table(pd.concat([_data, self.data]).reset_index(drop=True),
                     self.local_file,
                     self.compression,

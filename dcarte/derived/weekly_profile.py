@@ -89,6 +89,14 @@ def mine_sleep_states(sleep):
     sleep_states = pd.concat([sleep_states,start_end],axis=1).dropna()
     return sleep_states
 
+def mine_daily_naps(sleep):
+    sleep_ = sleep.set_index('start_date').between_time('08:00', '20:00').reset_index()
+    sleep_ = sleep_.assign(date = sleep_.start_date.dt.date)
+    sleep_ = sleep_.groupby(['patient_id', 'date']).size().reset_index(name='obs')
+    sleep_ = sleep_.assign(nap_ibp = sleep_.obs/60)
+    return sleep_ 
+
+
 def mine_bed_habits(bed_occupancy):
     df = (bed_occupancy.groupby(['patient_id','period_segments']).
              agg(start_date=('start_date', 'min'), 
@@ -135,16 +143,20 @@ def process_sleep_dailies(obj):
     sleep_periods = sleep_vitals_.join(habits_).join(sleep_states_).round(2)
     sleep_periods = sleep_periods.dropna(subset=['time_in_bed','DEEP','hr_max'])
     sleep_metrics = resample_sleep_metrics(sleep_periods)
-    diurnal_habits = resample_sleep_metrics(sleep_periods,'Diurnal')
-    if not diurnal_habits.empty:
-        diurnal_habits = diurnal_habits.assign(nap_ibp = diurnal_habits.time_in_bed)
-        sleep_metrics = pd.merge(sleep_metrics,diurnal_habits.nap_ibp,how='left',left_index=True, right_index=True)
-    else:
-        sleep_metrics = sleep_metrics.assign(nap_ibp = 0)   
-    sleep_metrics.nap_ibp = sleep_metrics.nap_ibp.fillna(0)
+    # diurnal_habits = resample_sleep_metrics(sleep_periods,'Diurnal')
+    # if not diurnal_habits.empty:
+    #     diurnal_habits = diurnal_habits.assign(nap_ibp = diurnal_habits.time_in_bed)
+    #     sleep_metrics = pd.merge(sleep_metrics,diurnal_habits.nap_ibp,how='left',left_index=True, right_index=True)
+    # else:
+    #     sleep_metrics = sleep_metrics.assign(nap_ibp = 0)   
+    # sleep_metrics.nap_ibp = sleep_metrics.nap_ibp.fillna(0)
+    daily_naps = mine_daily_naps(sleep)
+    
     sleep_metrics = sleep_metrics.assign(time_to_bed = (sleep_metrics.start_time.dt.time.apply(time_to_angles)+180)%360,
                                          wake_up_time = sleep_metrics.end_time.dt.time.apply(time_to_angles))
     sleep_metrics = sleep_metrics.reset_index().rename(columns={'datetime':'start_date'})
+    sleep_metrics = pd.merge(sleep_metrics.set_index(['patient_id','date']),daily_naps.set_index(['patient_id','date']).nap_ibp,how='left',left_index=True, right_index=True)
+    sleep_metrics.nap_ibp = sleep_metrics.nap_ibp.fillna(0)
     return sleep_metrics
 
 
@@ -196,16 +208,26 @@ def process_sleep_model(obj):
                 'time_to_bed':'To_bed',
                 'wake_up_time':'Arise'
                 }
-    df = df.rename(columns=mapper)            
+    df = df.rename(columns=mapper)     
+    dd = df[['AWAKE','DEEP','REM','LIGHT']]
+    df_proportions = dd.div(dd.sum(axis=1), axis=0)   
+    
     df = df.assign(
-        deep_ratio = (df.DEEP)/df.ibp,
-        awake_ratio = (df.AWAKE)/df.ibp,
-        rem_ratio = (df.REM)/df.ibp,
-        light_ratio = (df.LIGHT)/df.ibp,
+        deep_ratio = df_proportions.DEEP,
+        awake_ratio = df_proportions.AWAKE,
+        rem_ratio = df_proportions.REM,
+        light_ratio = df_proportions.LIGHT,
         exit_ratio = (df.nb_awakenings/(df.ibp+df.obp)),
-        night = df.start_date
+        mean_obp = np.clip(((60*df.obp)/df.nb_awakenings).round(),0,10),
+        obp_rate = (df.obp/(df.ibp+df.obp)),
+        night = df.start_date.dt.date.astype('datetime64[ns]')
     )
-
+    window = 14
+    df = df.assign(
+        hr_local_norm = df.dropna(subset = 'hr_average').groupby('patient_id').hr_average.transform(lambda x: (x - x.rolling(window=window, min_periods=1).mean())/x.rolling(window=window, min_periods=1).std()),
+        rr_local_norm = df.dropna(subset = 'rr_average').groupby('patient_id').rr_average.transform(lambda x: (x - x.rolling(window=window, min_periods=1).mean())/x.rolling(window=window, min_periods=1).std()))
+    
+    df.obp = np.clip(df.obp*60,0,600)
     return df
     
 
@@ -323,6 +345,7 @@ def create_weekly_profile():
                         'light':[['light','base']], 
                         'temperature':[['temperature','base']],
                         'sleep_model':[['sleep_dailies','profile']]}
+    # parent_datasets = {'sleep_model':[['sleep_dailies','profile']]}
     for dataset in parent_datasets.keys():
         p_datasets = {d[0]:dcarte.load(*d) for d in parent_datasets[dataset]} 
         LocalDataset(dataset_name = dataset,

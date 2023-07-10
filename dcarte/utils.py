@@ -235,6 +235,29 @@ def timer(desc : str = None):
         return wrapped
     return wrapper
 
+def align_dtypes(df_old, df_new):
+    """
+    This function aligns the data types of two pandas DataFrames.
+
+    Parameters:
+    df_old (pd.DataFrame): The DataFrame whose data types are to be converted.
+    df_new (pd.DataFrame): The DataFrame whose data types are to be matched.
+
+    Returns:
+    df_old (pd.DataFrame): The old DataFrame with converted data types.
+    """
+    for column in df_old.columns:
+        if df_old[column].dtype != df_new[column].dtype:
+            try:
+                if pd.api.types.is_datetime64tz_dtype(df_new[column].dtype):
+                    df_old[column] = pd.to_datetime(df_old[column]).dt.tz_localize('UTC')
+                else:
+                    df_old[column] = df_old[column].astype(df_new[column].dtype)
+            except ValueError:
+                pass
+    return df_old
+
+
 def get_timezone(timestamp):
     if timestamp.tzinfo is None:
         return False
