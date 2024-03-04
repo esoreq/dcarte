@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional,List
 import datetime as dt
+import pytz
 import json
 import os
 import logging
@@ -10,6 +11,7 @@ import pandas as pd
 from time import sleep
 from io import StringIO
 import requests
+from minder.research_data_snapshots import download_datasets
 from .config import get_config,update_token
 from .utils import (write_table,
                    read_table,
@@ -55,6 +57,7 @@ class MinderDataset(object):
         reload (bool, optional): If True, re-downloads the dataset. Defaults to False.
         reapply (bool, optional): If True, reads the local file rather than downloading the dataset. Defaults to False.
         update (bool, optional): If True, updates the dataset with new data. Defaults to False.
+        use_snapshots (bool, optional): If True, download data using snapshots. Defaults to True.
 
     Raises:
         MinderException: Raised when there is an issue with the dataset request or response.
@@ -98,6 +101,7 @@ class MinderDataset(object):
     reload: bool = False
     reapply: bool = False
     update: bool = False
+    use_snapshots: bool = True
 
     def __post_init__(self):
         self._delay = dt.timedelta(hours=self.delay)
@@ -130,11 +134,35 @@ class MinderDataset(object):
             self.data = read_table(self.local_file)
     
     def download_dataset(self):
-        self.post_request()
-        self.process_request()
-        self.download_data()
+        if self.use_snapshots:
+            self.download_snapshots()
+        else:
+            self.post_request()
+            self.process_request()
+            self.download_data()
         self.update_metadata()
         self.save_dataset()
+
+    def download_snapshots(self):
+        if "organizations" not in self.data_request:
+            raise MinderException("Please specify organizations")
+        os.environ["RESEARCH_PORTAL_API"] = cfg["server"].removesuffix("/export")
+        data = []
+        for dataset in self.datasets:
+            data.append(
+                pd.read_parquet(
+                    download_datasets(self.data_request["organizations"], [dataset], refresh=self.reload),
+                    columns=self.columns,
+                    filters=[
+                        ("start_date", ">=", dt.datetime.fromisoformat(self.since.removesuffix("Z")).replace(tzinfo=pytz.UTC)),
+                        ("start_date", "<", dt.datetime.fromisoformat(self.until.removesuffix("Z")).replace(tzinfo=pytz.UTC)),
+                    ]
+                    if "start_date" in self.columns
+                    else None,
+                ).assign(source=dataset)
+            )
+        self.data = pd.concat(data).reset_index(drop=True).applymap(lambda x: str(x) if isinstance(x, np.ndarray) else x).replace({"false": 0.0, "true": 1.0}).astype(dict(zip(self.columns, self.dtypes)))
+
 
     def post_request(self):
         try:
