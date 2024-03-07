@@ -20,7 +20,7 @@ scipy = "^1.7.3"
 deepdiff = "^5.7.0"
 imbalanced-learn = "^0.9.0"
 matplotlib = "^3.5.1"
-"minder.research-data-snapshots" = ">=0.4"
+"minder.research-data-snapshots" = ">=0.6"
 
 
 [tool.poetry.dev-dependencies]

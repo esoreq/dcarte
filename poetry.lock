@@ -1055,12 +1055,12 @@ files = [
 
 [[package]]
 name = "minder-research-data-snapshots"
-version = "0.4"
+version = "0.6"
 description = ""
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "minder.research_data_snapshots-0.4-py3-none-any.whl", hash = "sha256:aab4ef944b74c91c5d0f4dfe0ee23d60f2330170b677198c7817da30abe216fa"},
+    {file = "minder.research_data_snapshots-0.6-py3-none-any.whl", hash = "sha256:fa264c601c58505aded2d2fb0d408b8949243030d68f762e37115fdef5b9cda5"},
 ]
 
 [package.dependencies]
@@ -1640,13 +1640,13 @@ vulture = ["vulture"]
 
 [[package]]
 name = "pyparsing"
-version = "3.1.1"
+version = "3.1.2"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
 optional = false
 python-versions = ">=3.6.8"
 files = [
-    {file = "pyparsing-3.1.1-py3-none-any.whl", hash = "sha256:32c7c0b711493c72ff18a981d24f28aaf9c1fb7ed5e9667c9e84e3db623bdbfb"},
-    {file = "pyparsing-3.1.1.tar.gz", hash = "sha256:ede28a1a32462f5a9705e07aea48001a08f7cf81a021585011deba701581a0db"},
+    {file = "pyparsing-3.1.2-py3-none-any.whl", hash = "sha256:f9db75911801ed778fe61bb643079ff86601aca99fcae6345aa67292038fb742"},
+    {file = "pyparsing-3.1.2.tar.gz", hash = "sha256:a1bac0ce561155ecc3ed78ca94d3c9378656ad4c94c1270de543f621420f94ad"},
 ]
 
 [package.extras]
@@ -2346,4 +2346,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.13"
-content-hash = "3d075ec3c8645761e749a1f06caa324e3e16f26f3a31a741f853f4de5ebc1d8e"
+content-hash = "5011e38cd8717d955ad2d175dc6f09b852364bc6580b6ddceed7e53c5b171984"
