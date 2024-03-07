@@ -144,14 +144,12 @@ class MinderDataset(object):
         self.save_dataset()
 
     def download_snapshots(self):
-        if "organizations" not in self.data_request:
-            raise MinderException("Please specify organizations")
         os.environ["RESEARCH_PORTAL_API"] = cfg["server"].removesuffix("/export")
         data = []
         for dataset in self.datasets:
             data.append(
                 pd.read_parquet(
-                    download_datasets(self.data_request["organizations"], [dataset], refresh=self.reload),
+                    download_datasets([dataset], self.data_request.get("organizations"), refresh=self.reload),
                     columns=self.columns,
                     filters=[
                         ("start_date", ">=", dt.datetime.fromisoformat(self.since.removesuffix("Z")).replace(tzinfo=pytz.UTC)),
